@@ -30,7 +30,7 @@
 
         <span class="flex w-full justify-center items-center font-bold underline my-6">
             <a href="{{route('explain')}}">কিভাবে এটি কাজ করে | How it Works</a>
-            <a href="{{route('login')}}">প্রবেশ | Login</a>
+            <a href="{{route('login')}}" class="bg-black p-3 border-box rounded-md text-white font-bold ml-3">প্রবেশ | Login</a>
         </span>
 
         <!-- Search Bar -->

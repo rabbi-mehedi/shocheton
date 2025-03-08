@@ -1,8 +1,10 @@
 @extends('layouts.user')
 @section('page_title','কিভাবে এটি কাজ করে | How it Works')
 @section('page_content')
-<div class="w-full bg-white">
-
+<div class="w-full flex justify-center flex-col items-center bg-white">
+    <a href="{{route('home')}}">
+        <img src="{{asset('wide_logo.png')}}" alt="shocheton.org" class="my-6 h-[10vh]">
+    </a>
     <!-- Header Section -->
     <header class="bg-red-600 text-white py-6">
         <div class="container mx-auto px-4 text-center">
