@@ -83,7 +83,7 @@
                         <div class="flex flex-wrap gap-2 mt-2">
                             <span class="text-xs px-3 py-1 bg-gray-100 rounded-full text-gray-800">
                                 <strong>Nature of Incident:</strong> 
-                                {{ $offender->incident_type ?? 'Not Specified' }}
+                                {{ $offender->offense_type ?? 'Not Specified' }}
                             </span>
                             <span class="text-xs px-3 py-1 bg-gray-100 rounded-full text-gray-800">
                                 <strong>Location:</strong> 
