@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PrimaryController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\SearchController;
 
 use App\Http\Middleware\CheckAdmin;
 
@@ -12,6 +13,7 @@ Route::get('/', PrimaryController::class)->name('home');
 Route::get('/how-it-works', [PrimaryController::class, 'explain'])->name('explain');
 Route::get('/submit-report', [PrimaryController::class,'showForm'])->name('submit.report.form');
 Route::post('/submit-report', [PrimaryController::class,'submitForm'])->name('submit.report');
+Route::get('/search', [SearchController::class, 'results'])->name('search.results');
 
 Route::group([
     'prefix' => 'admin',
