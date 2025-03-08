@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             
-            $table->unsignedBigInteger('offender_id');
+            $table->unsignedBigInteger('offender_id')->nullable();
             $table->foreign('offender_id')->references('id')->on('offenders')->onDelete('cascade');
 
             $table->enum('offender_relation_to_victim', ['Stranger', 'Family Member', 'Teacher', 'Colleague', 'Neighbor', 'Police', 'Partner', 'Religious Leader', 'Other'])->nullable();

@@ -15,8 +15,12 @@ class PrimaryController extends Controller
     public function __invoke()
     {
         // Fetch offenders from the database.
-        $offenders = Offender::with('report')->latest()->get();
-        // dd(auth()->user()->reports);
+        $offenders = Offender::with('report')
+        ->whereHas('report', function ($query) {
+            $query->where('verified', true);
+        })
+        ->latest()
+        ->get();
 
         return view('welcome',compact('offenders'));
     }
@@ -96,32 +100,9 @@ class PrimaryController extends Controller
             ]
         );
 
-        // 4. Prepare Offender data (if any)
-        $offenderData = [];
-        if (!empty($validated['offender_name']) || !empty($validated['incident_type'])) {
-            $offenderData = [
-                'name'             => $validated['offender_name'] ?? 'Unknown',
-                'age'              => $validated['offender_age'] ?? null,
-                'gender'           => $validated['offender_gender'] ?? 'other',
-                'crime_description'=> $validated['description'] ?? 'N/A',
-                'offense_type'     => $validated['incident_type'] ?? 'Other',
-                'location'         => $validated['location'] ?? null,
-                'status'           => 'allegedly', // default
-                'risk_level'       => 'medium',    // default
-            ];
-        }
-
-        // 4a. Create the Offender record if we have relevant data
-        $offender = null;
-        if (!empty($offenderData)) {
-            $offender = Offender::create($offenderData);
-
-            // If the offender was created successfully, attach the offender_photo via Spatie
-            if ($offender && $request->hasFile('offender_photo')) {
-                $offender->addMedia($request->file('offender_photo'))
-                        ->toMediaCollection('offender_photo');
-            }
-        }
+        // 6. Create the Report record
+        //    - e.g., user_id, offender_id, offender_relation_to_victim, police_status, police_station,
+        //      needs_legal_support, needs_ngo_support, privacy_level, contact_permission, victim_photo, etc.
 
         // 5. Build additional details for leftover info
         $additionalDetails = [];
@@ -142,12 +123,8 @@ class PrimaryController extends Controller
         }
         $combinedDetails = implode(" | ", $additionalDetails);
 
-        // 6. Create the Report record
-        //    - e.g., user_id, offender_id, offender_relation_to_victim, police_status, police_station,
-        //      needs_legal_support, needs_ngo_support, privacy_level, contact_permission, victim_photo, etc.
         $reportData = [
             'user_id'                    => $user->id,
-            'offender_id'                => $offender ? $offender->id : null,
             'offender_relation_to_victim'=> $validated['offender_relation'] ?? null,
             'police_status'              => $validated['police_status'] ?? 'unreported',
             'police_station'             => $validated['police_station'] ?? null,
@@ -159,6 +136,39 @@ class PrimaryController extends Controller
         ];
 
         $report = Report::create($reportData);
+
+        // 4. Prepare Offender data (if any)
+        $offenderData = [];
+        if (!empty($validated['offender_name']) || !empty($validated['incident_type'])) {
+            $offenderData = [
+                'name'             => $validated['offender_name'] ?? 'Unknown',
+                'report_id'        => $report->id,
+                'age'              => $validated['offender_age'] ?? null,
+                'gender'           => $validated['offender_gender'] ?? 'other',
+                'crime_description'=> $validated['description'] ?? 'N/A',
+                'offense_type'     => $validated['incident_type'] ?? 'Other',
+                'location'         => $validated['location'] ?? null,
+                'status'           => 'allegedly', // default
+                'risk_level'       => 'medium',    // default
+            ];
+        }
+
+
+        // 4a. Create the Offender record if we have relevant data
+        $offender = null;
+        if (!empty($offenderData)) {
+            $offender = Offender::create($offenderData);
+            $report->offender_id = $offender->id;
+            $report->save();
+            // If the offender was created successfully, attach the offender_photo via Spatie
+            if ($offender && $request->hasFile('offender_photo')) {
+                $offender->addMedia($request->file('offender_photo'))
+                        ->toMediaCollection('offender_photo');
+            }
+        }
+
+        
+
 
         // 6a. Victim Photo (if uploaded) => attach via Spatie
         if ($report && $request->hasFile('victim_photo')) {

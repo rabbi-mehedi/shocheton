@@ -23,6 +23,7 @@
             </thead>
             <tbody class="text-gray-700">
                 @forelse($allOffenders as $offender)
+                
                 <tr class="border-b">
                     <td class="px-4 py-2">{{ $offender->id }}</td>
                     <td class="px-4 py-2">{{ $offender->name }}</td>

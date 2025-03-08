@@ -22,6 +22,7 @@
             </thead>
             <tbody class="text-gray-700">
                 @forelse($allReports as $report)
+                
                 <tr class="border-b">
                     <td class="px-4 py-2">{{ $report->id }}</td>
                     <td class="px-4 py-2">{{ $report->incident_type ?? 'N/A' }}</td>

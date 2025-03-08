@@ -17,6 +17,7 @@ class Offender extends Model implements HasMedia
         'name',
         'age',
         'crime_description',
+        'report_id',
         'offense_type',
         'location',
         'status',
@@ -25,6 +26,6 @@ class Offender extends Model implements HasMedia
 
     public function report()
     {
-        return $this->belongsTo(Report::class,'offender_id');
+        return $this->belongsTo(Report::class);
     }
 }
