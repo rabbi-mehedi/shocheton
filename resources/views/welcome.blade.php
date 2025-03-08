@@ -133,7 +133,7 @@
                                 </span>
                             @endif
                         </div>
-                    </div>
+                    </div>s
 
                     <!-- Timestamp (e.g., '3 weeks ago') -->
                     <div class="text-xs text-gray-500 sm:self-end">
