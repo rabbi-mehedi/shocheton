@@ -199,4 +199,9 @@ class PrimaryController extends Controller
         return view('thankyou');  // or redirect()->route('thank.you.page');
     }
 
+    public function explain()
+    {
+        return view('explain');
+    }
+
 }

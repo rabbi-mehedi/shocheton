@@ -1,12 +1,14 @@
 @extends('layouts.user')
-@section('page_title','Bangladesh Sex Offender Registry')
+@section('page_title',"সচেতন.org | Bangladesh's First Sex Offender Registry")
 @section('page_content')
 <div class="w-full bg-white">
 
     <!-- Header Section -->
     <header class=" py-6">
         <div class="container flex items-center justify-center flex-col mx-auto px-4 text-center">
-            <img src="{{asset('wide_logo.png')}}" class="h-[10vh]" alt="Shocheton.org">
+            <a href="{{route('home')}}">
+                <img src="{{asset('wide_logo.png')}}" class="h-[10vh]" alt="Shocheton.org">
+            </a>
             <h1 class="text-xl mt-6 md:text-2xl font-bold uppercase tracking-wider">
                 Bangladesh Sex Offenders<br>Public Registry
             </h1>
@@ -25,6 +27,11 @@
                 I WANT TO REPORT AN INCIDENT
             </a>
         </div>
+
+        <span class="flex w-full justify-center items-center font-bold underline my-6">
+            <a href="{{route('explain')}}">কিভাবে এটি কাজ করে | How it Works</a>
+            <a href="{{route('login')}}">প্রবেশ | Login</a>
+        </span>
 
         <!-- Search Bar -->
         <div class="flex items-center justify-center w-full max-w-lg mx-auto mb-8">
