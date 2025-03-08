@@ -417,7 +417,6 @@
                 <select name="privacy_level" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400">
                     <option value="private">ব্যক্তিগত (Private)</option>
                     <option value="public">সর্বসাধারণ (Public)</option>
-                    <option value="anonymous">অনামিকা (Anonymous)</option>
                 </select>
 
                 <!-- Victim Photo (optional) -->
