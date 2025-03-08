@@ -4,10 +4,11 @@
 <div class="w-full bg-white">
 
     <!-- Header Section -->
-    <header class="bg-red-600 text-white py-6">
-        <div class="container mx-auto px-4 text-center">
-            <h1 class="text-xl md:text-2xl font-bold uppercase tracking-wider">
-                Bangladesh Sex Offenders Public Registry
+    <header class=" py-6">
+        <div class="container flex items-center justify-center flex-col mx-auto px-4 text-center">
+            <img src="{{asset('wide_logo.png')}}" class="h-[10vh]" alt="Shocheton.org">
+            <h1 class="text-xl mt-6 md:text-2xl font-bold uppercase tracking-wider">
+                Bangladesh Sex Offenders<br>Public Registry
             </h1>
         </div>
     </header>
