@@ -50,6 +50,16 @@ class User extends Authenticatable implements HasMedia
         ];
     }
 
+    public function isAdmin()
+    {
+        $role = $this->role;
+        if($role=="admin"){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function reports()
     {
         return $this->hasMany(Report::class);

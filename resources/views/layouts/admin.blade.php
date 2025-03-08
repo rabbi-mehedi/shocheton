@@ -12,7 +12,7 @@
     @livewireStyles
 </head>
 <body>
-    <livewire:public-navigation></livewire:public-navigation>
+    <livewire:navigation-bar></livewire:navigation-bar>
     @yield('page_content')
     @livewireScripts
 </body>
