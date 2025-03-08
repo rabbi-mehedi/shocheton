@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('witnesses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('report_id')->constrained('reports')->onDelete('cascade');
+            $table->unsignedBigInteger('report_id');
+            $table->foreign('report_id')->references('id')->on('reports')->onDelete('cascade');
             $table->string('name')->nullable();
             $table->string('contact')->nullable();
             $table->text('statement')->nullable();

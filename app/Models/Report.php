@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use App\Models\User;
+use App\Models\Offender;
+
 
 class Report extends Model implements HasMedia
 {
@@ -22,5 +25,20 @@ class Report extends Model implements HasMedia
         'contact_permission',
         'additional_details' 
     ];
+
+    public function verified()
+    {
+        return $this->verified;
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function offender()
+    {
+        return $this->hasOne(Offender::class);
+    }
     
 }

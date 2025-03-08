@@ -15,7 +15,8 @@ class PrimaryController extends Controller
     public function __invoke()
     {
         // Fetch offenders from the database.
-        $offenders = Offender::latest()->get();
+        $offenders = Offender::with('report')->latest()->get();
+        // dd(auth()->user()->reports);
 
         return view('welcome',compact('offenders'));
     }

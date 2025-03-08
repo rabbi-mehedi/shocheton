@@ -14,6 +14,9 @@ return new class extends Migration
         Schema::create('offenders', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            
+            $table->unsignedBigInteger('report_id');
+
             $table->integer('age')->nullable();
             $table->enum('gender',['male','female','other'])->nullable();
             $table->text('crime_description');

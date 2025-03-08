@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
+use App\Models\Report;
+
+
 class Offender extends Model implements HasMedia
 {
     use InteractsWithMedia;
@@ -19,4 +22,9 @@ class Offender extends Model implements HasMedia
         'status',
         'evidence',
         'risk_level'];
+
+    public function report()
+    {
+        return $this->belongsTo(Report::class,'offender_id');
+    }
 }
