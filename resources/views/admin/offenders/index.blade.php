@@ -37,7 +37,7 @@
                     </td>
                     <td class="px-4 py-2">
                         <!-- Example action link -->
-                        <a href="#"
+                        <a href="{{route('admin.offender.edit',$offender->id)}}"
                            class="text-blue-600 hover:underline">
                            Edit
                         </a>

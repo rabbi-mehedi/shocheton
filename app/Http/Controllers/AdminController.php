@@ -53,6 +53,18 @@ class AdminController extends Controller
         return view('admin.offenders.index',compact('allOffenders'));
     }
 
+    public function offenderEdit(Offender $offender)
+    {
+        return view('admin.offenders.edit',[
+            'offender' => $offender
+        ]);
+    }
+
+    public function offenderUpdate(Request $request, Offender $offender)
+    {
+
+    }
+
     public function reports(Report $report)
     {
         $allReports = $report::latest()->get();

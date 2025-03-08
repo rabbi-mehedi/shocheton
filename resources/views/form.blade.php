@@ -4,7 +4,6 @@
 
 <!-- Outer Container -->
 <div class="bg-gray-50 min-h-screen py-8">
-
     <div class="container mx-auto px-4 py-6 bg-white shadow-md rounded-lg">
 
         <!-- Page Heading -->
@@ -41,7 +40,7 @@
                 <div id="step4-indicator" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-300 text-gray-700 font-bold">4</div>
             </div>
 
-            <!-- STEP 1: User Info + OTP -->
+            <!-- STEP 1: User Info -->
             <div id="step1" class="bg-white p-6 rounded-lg shadow-inner">
                 <h2 class="text-xl font-bold text-gray-900 mb-4">
                     ধাপ ১: আপনার তথ্য / Step 1: Your Information
@@ -156,33 +155,14 @@
                     </label>
                 </div>
 
-                <!-- Send OTP -->
-                <button 
-                    type="button" 
-                    id="sendOTP" 
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 mt-4 rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-                >
-                    ওটিপি পাঠান (SEND OTP)
-                </button>
-
-                <!-- OTP Section (Hidden initially) -->
-                <div id="otpSection" class="hidden mt-4">
-                    <label class="block text-sm font-semibold text-gray-700">
-                        ওটিপি / Enter OTP:
-                    </label>
-                    <input 
-                        type="text" 
-                        id="otpInput" 
-                        name="otp" 
-                        class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400" 
-                        placeholder="ওটিপি লিখুন / Enter OTP" 
-                    >
+                <!-- Navigation Button for Step 1 -->
+                <div class="flex justify-end mt-6">
                     <button 
                         type="button" 
-                        id="verifyOTP" 
-                        class="w-full bg-green-600 hover:bg-green-700 text-white py-3 mt-4 rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+                        onclick="nextStep(1)" 
+                        class="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-gray-800 transition"
                     >
-                        ওটিপি যাচাই করুন (VERIFY OTP)
+                        পরবর্তী (NEXT)
                     </button>
                 </div>
             </div>
@@ -485,8 +465,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    let otpVerified = false;
-
     const reportTypeSelect = document.getElementById('report_type');
     const victimInfoSection = document.getElementById('victimInfoSection');
     const witnessInfoSection = document.getElementById('witnessInfoSection');
@@ -534,31 +512,6 @@ document.addEventListener('DOMContentLoaded', function() {
         activeIndicator.classList.remove("bg-gray-300", "text-gray-700");
         activeIndicator.classList.add("bg-red-600", "text-white");
     }
-
-    // OTP Logic
-    document.getElementById("sendOTP").addEventListener("click", function() {
-        const phone = document.getElementById("phone").value.trim();
-        if (!phone) {
-            alert("Please enter your phone number first.");
-            return;
-        }
-        // Call your API endpoint to send OTP here
-        alert("OTP sent to " + phone);
-        document.getElementById("otpSection").classList.remove("hidden");
-    });
-
-    document.getElementById("verifyOTP").addEventListener("click", function() {
-        const otpValue = document.getElementById("otpInput").value.trim();
-        if (!otpValue) {
-            alert("Please enter the OTP.");
-            return;
-        }
-        // Call your API endpoint to verify OTP here
-        otpVerified = true;
-        alert("OTP verified successfully!");
-        // Immediately proceed to Step 2 (removing friction)
-        nextStep(1);
-    });
 });
 </script>
 @endsection
