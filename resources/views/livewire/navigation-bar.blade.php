@@ -16,8 +16,7 @@
                 <div class="hidden sm:flex sm:items-center space-x-8">
                     <!-- Example Admin Links (Desktop) -->
                     <a href="{{route('admin.dashboard')}}" class="text-gray-900 hover:text-gray-600">Dashboard</a>
-                    <a href="{{ route('admin.users') }}" class="text-gray-900 hover:text-gray-600">Users</a>
-                    <a href="#" class="text-gray-900 hover:text-gray-600">Reports</a>
+              
 
                     <!-- User Dropdown (Desktop) -->
                     <div class="relative" x-data="{ openUserMenu: false }">
@@ -97,12 +96,7 @@
                 <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                     Dashboard
                 </a>
-                <a href="{{ route('admin.users') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                    Users
-                </a>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                    Reports
-                </a>
+              
 
                 <!-- Profile & Logout (Mobile) -->
                 <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">

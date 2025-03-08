@@ -10,9 +10,13 @@ use App\Models\Report;
 
 class AdminController extends Controller
 {
-    public function __invoke()
+    public function __invoke(User $user, Offender $offender, Report $report)
     {
-        return view('admin.dashboard');
+        $allUsers = $user::latest()->get();
+        $allOffenders = $offender::latest()->get();
+        $allReports = $report::latest()->get();
+
+        return view('admin.dashboard',compact('allUsers','allOffenders','allReports'));
     }
 
     public function users(User $user)

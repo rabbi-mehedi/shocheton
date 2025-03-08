@@ -2,7 +2,7 @@
 @section('page_title','Offenders | Admin Panel')
 @section('page_content')
 <div class="container mx-auto px-4 py-6">
-    <h1 class="text-2xl font-bold text-gray-900 mb-4">All Offenders</h1>
+    <h1 class="text-2xl font-bold text-gray-900 mb-4">All Offenders ({{count($allOffenders)}})</h1>
 
     <!-- If you want pagination, ensure your controller uses paginate() 
          and that you have $allOffenders->links() at the bottom -->

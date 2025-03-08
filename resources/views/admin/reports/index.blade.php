@@ -2,7 +2,7 @@
 @section('page_title','Reports | Admin Panel')
 @section('page_content')
 <div class="container mx-auto px-4 py-6">
-    <h1 class="text-2xl font-bold text-gray-900 mb-4">All Reports</h1>
+    <h1 class="text-2xl font-bold text-gray-900 mb-4">All Reports ({{count($allReports)}})</h1>
 
     <!-- If you want pagination, ensure your controller uses paginate() 
          and that you have $allReports->links() at the bottom -->

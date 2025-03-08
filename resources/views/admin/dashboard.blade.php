@@ -10,7 +10,7 @@
         <div class="bg-white shadow rounded-lg p-4 flex items-center justify-between">
             <div>
                 <h2 class="text-lg font-semibold text-gray-700">Total Users</h2>
-                <p class="text-3xl font-bold text-gray-900 mt-2">1,234</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2">{{count($allUsers)}}</p>
             </div>
             <div class="text-gray-400">
                 <!-- Icon (example user icon) -->
@@ -24,7 +24,7 @@
         <div class="bg-white shadow rounded-lg p-4 flex items-center justify-between">
             <div>
                 <h2 class="text-lg font-semibold text-gray-700">Total Offenders</h2>
-                <p class="text-3xl font-bold text-gray-900 mt-2">567</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2">{{count($allOffenders)}}</p>
             </div>
             <div class="text-gray-400">
                 <!-- Icon (example caution icon) -->
@@ -38,7 +38,7 @@
         <div class="bg-white shadow rounded-lg p-4 flex items-center justify-between">
             <div>
                 <h2 class="text-lg font-semibold text-gray-700">Total Reports</h2>
-                <p class="text-3xl font-bold text-gray-900 mt-2">89</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2">{{count($allReports)}}</p>
             </div>
             <div class="text-gray-400">
                 <!-- Icon (example document icon) -->
