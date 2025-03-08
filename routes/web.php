@@ -25,6 +25,8 @@ Route::group([
     Route::put('/users/{user:id}/update', [AdminController::class, 'update'])->name('admin.user.update');
     Route::get('/offenders', [AdminController::class, 'offenders'])->name('admin.offenders'); 
     Route::get('/reports', [AdminController::class, 'reports'])->name('admin.reports'); 
+    Route::get('/reports/{report:id}/edit', [AdminController::class, 'reportEdit'])->name('admin.report.edit'); 
+    Route::put('/reports/{report:id}/update', [AdminController::class, 'reportUpdate'])->name('admin.report.update'); 
     // Add more admin routes here
 });
 

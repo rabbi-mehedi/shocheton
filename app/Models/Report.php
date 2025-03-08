@@ -23,7 +23,8 @@ class Report extends Model implements HasMedia
         'needs_ngo_support',
         'privacy_level',
         'contact_permission',
-        'additional_details' 
+        'additional_details', 
+        'verified',
     ];
 
     public function verified()

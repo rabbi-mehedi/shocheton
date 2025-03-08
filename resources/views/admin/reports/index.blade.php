@@ -3,7 +3,14 @@
 @section('page_content')
 <div class="container mx-auto px-4 py-6">
     <h1 class="text-2xl font-bold text-gray-900 mb-4">All Reports ({{count($allReports)}})</h1>
-
+    @if(session('success'))
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative my-4">
+            <strong class="font-bold">Success!</strong>
+            <span class="block sm:inline">
+                {{ session('success') }}
+            </span>
+        </div>
+    @endif
     <!-- If you want pagination, ensure your controller uses paginate() 
          and that you have $allReports->links() at the bottom -->
 
@@ -25,23 +32,23 @@
                 
                 <tr class="border-b">
                     <td class="px-4 py-2">{{ $report->id }}</td>
-                    <td class="px-4 py-2">{{ $report->incident_type ?? 'N/A' }}</td>
-                    <td class="px-4 py-2">{{ $report->location ?? 'Unknown' }}</td>
+                    <td class="px-4 py-2">{{ $report->offender->offense_type ?? 'N/A' }}</td>
+                    <td class="px-4 py-2">{{ $report->offender->location ?? 'Unknown' }}</td>
                     <!-- If you have a relationship to a User model, e.g. $report->user->name -->
                     <td class="px-4 py-2">
                         {{ optional($report->user)->name ?? 'Anonymous' }}
                     </td>
                     <td class="px-4 py-2">
-                        {{ $report->status ?? 'Pending' }}
+                        {{ $report->verified ?? 'Pending' }}
                     </td>
                     <td class="px-4 py-2">
                         {{ $report->created_at->format('Y-m-d') }}
                     </td>
                     <td class="px-4 py-2">
                         <!-- Example "View" link or "Edit" button -->
-                        <a href="#" 
+                        <a href="{{route('admin.report.edit', $report->id)}}" 
                            class="text-blue-600 hover:underline">
-                           View
+                           Edit
                         </a>
                         <!-- Add more actions as needed (delete, edit, etc.) -->
                     </td>
