@@ -12,6 +12,8 @@
         </div>
     </header>
 
+    <link rel="icon" type="image/png" href="{{asset('iconmark.png')}}">
+
     <!-- Main Container -->
     <main class="container mx-auto px-4 py-6">
 
