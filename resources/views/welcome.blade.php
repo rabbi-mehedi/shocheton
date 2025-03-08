@@ -35,7 +35,7 @@
                     <button
                         class="absolute inset-y-0 right-0 flex items-center justify-center bg-red-600 text-white px-4 m-1 rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400"
                     >
-                        🔍
+                        Search
                     </button>
                 </div>
             </div>
@@ -133,7 +133,7 @@
                                 </span>
                             @endif
                         </div>
-                    </div>s
+                    </div>
 
                     <!-- Timestamp (e.g., '3 weeks ago') -->
                     <div class="text-xs text-gray-500 sm:self-end">
