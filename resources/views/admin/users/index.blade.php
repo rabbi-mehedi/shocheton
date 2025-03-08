@@ -6,7 +6,15 @@
 
     <!-- If you want pagination, ensure your controller uses paginate() 
          and that you have $users->links() at the bottom -->
-
+         @if(session('success'))
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative my-4">
+                <strong class="font-bold">Success!</strong>
+                <span class="block sm:inline">
+                    {{ session('success') }}
+                </span>
+            </div>
+        @endif
+     
     <div class="overflow-x-auto bg-white shadow-md rounded-lg">
         <table class="min-w-full table-auto">
             <thead class="bg-gray-200 text-gray-700">
@@ -29,7 +37,7 @@
                     <td class="px-4 py-2">{{ $user->created_at->format('Y-m-d') }}</td>
                     <td class="px-4 py-2">
                         <!-- Example "Edit" link or "View" button -->
-                        <a href="#" 
+                        <a href="{{route('admin.user.edit', $user->id)}}" 
                            class="text-blue-600 hover:underline">
                            Edit
                         </a>

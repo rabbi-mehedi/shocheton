@@ -25,6 +25,28 @@ class AdminController extends Controller
         return view('admin.users.index', compact('allUsers'));
     }
 
+    public function edit(User $user)
+    {
+        return view('admin.users.edit',compact('user'));
+    }
+
+    public function update(Request $request, User $user)
+    {
+        
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'nullable|string|max:20',
+            'gender' => 'nullable|in:male,female,other',
+            'role' => 'required|in:user,admin',
+        ]);
+    
+        $user->update($validated);
+    
+        return redirect()->route('admin.users')
+            ->with('success', 'User updated successfully.');
+    }
+
     public function offenders(Offender $offender)
     {
         $allOffenders = $offender::latest()->get();
