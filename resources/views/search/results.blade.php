@@ -17,7 +17,9 @@ Search results for "{{$query}}"
         @if($offenders->count())
             <ul class="list-disc list-inside text-gray-700">
                 @foreach($offenders as $off)
-                    <livewire:offender :offender="$off"></livewire:offender>
+                @if ($off->report->verified)
+                    <livewire:offender :offender="$off"></livewire:offender>                    
+                @endif
                 @endforeach
             </ul>
         @else
@@ -31,10 +33,12 @@ Search results for "{{$query}}"
         @if($reports->count())
             <ul class="list-disc list-inside text-gray-700">
                 @foreach($reports as $rep)
+                    @if($rep->verified)    
                     <li>
                         Incident: {{ $rep->offender->offense_type }} - Location: {{ $rep->offender->location }}
                         <!-- Add more fields as needed -->
                     </li>
+                    @endif
                 @endforeach
             </ul>
         @else
