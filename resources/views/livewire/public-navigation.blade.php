@@ -104,12 +104,6 @@
                 <a href="{{ route('home') }}" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-700 hover:bg-gray-100">
                     Home
                 </a>
-                <a href="#" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-700 hover:bg-gray-100">
-                    About
-                </a>
-                <a href="#" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-700 hover:bg-gray-100">
-                    Contact
-                </a>
 
                 @auth
                     <!-- Mobile: Profile & Logout -->
