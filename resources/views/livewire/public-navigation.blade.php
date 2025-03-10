@@ -17,9 +17,6 @@
                 <div class="hidden sm:ml-6 sm:flex sm:items-center space-x-8">
                     <!-- Example nav links -->
                     <a href="{{ route('home') }}" class="text-gray-900 hover:text-gray-600">Home</a>
-                    <a href="#" class="text-gray-900 hover:text-gray-600">About</a>
-                    <a href="#" class="text-gray-900 hover:text-gray-600">Contact</a>
-
                     @auth
                         <!-- Desktop: Profile/Logout Dropdown -->
                         <div class="relative" x-data="{ openUser: false }">
