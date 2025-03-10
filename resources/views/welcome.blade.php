@@ -49,8 +49,21 @@
             </span>
     
             <livewire:global-search></livewire:global-search>
-            <small class="font-bold TEXT-CENTER text-gray-400 mt-6">NOTE : *IF YOUR SUBMITTED REPORT IS NOT VISIBLE IN SEARCH,<br>
-                IT IS STILL IN REVIEW BY MODERATION TEAM.*</small>
+            <small class="font-bold TEXT-CENTER text-gray-400 mt-6">DISCLAIMER & NOTE : <ul>
+                <li class="my-2 list-decimal">THIS IS NOT A GOVERNMENT WEBSITE</li>
+                
+                <li class="my-2 list-decimal">IF YOUR SUBMITTED REPORT IS NOT VISIBLE IN SEARCH,<br>
+                    IT IS STILL IN REVIEW BY MODERATION TEAM.</li>
+                <li class="my-2 list-decimal">THIS WEBSITE IS IN BETA AND YOU EXPERIENCE HAVE TECHNICAL DIFFICULTIES <br>
+                PLEASE REPORT ANY BUGS TO OUR SOCIALS <br><br>
+                <span class="flex w-full">
+                    <a target="_blank" href="https://www.instagram.com/shocheton.live/" class="text-red-500">Instagram</a>
+                    <a target="_blank" href="https://www.facebook.com/profile.php?id=61573974269133" class="text-red-500 ml-6">Facebook</a>
+
+                </span>
+            </li>
+                
+                </ul></small>
             <!-- Offenders Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach ($offenders as $offender)
