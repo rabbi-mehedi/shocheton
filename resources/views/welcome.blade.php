@@ -31,7 +31,7 @@
         <link rel="icon" type="image/png" href="{{asset('iconmark.png')}}">
     
         <!-- Main Container -->
-        <main class="container mx-auto px-4 py-6">
+        <main class="container flex flex-col w-ful justify-center items-center mx-auto px-4 py-6">
     
             <!-- Report Button -->
             <div class="text-center mb-6">
