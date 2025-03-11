@@ -105,10 +105,6 @@
             </ul>
         </div>
 
-        Hello brothers
-
-       
-
     </main>
 </div>
 @endsection
