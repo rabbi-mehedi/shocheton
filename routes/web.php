@@ -15,6 +15,12 @@ Route::get('/submit-report', [PrimaryController::class,'showForm'])->name('submi
 Route::post('/submit-report', [PrimaryController::class,'submitForm'])->name('submit.report');
 Route::get('/search', [SearchController::class, 'results'])->name('search.results');
 
+Route::get('/otp-verify', function() {
+    return view('auth.verify-otp');
+})->name('otp.verify');
+
+Route::post('/otp-check', [RegisteredUserController::class, 'verifyOtp'])->name('otp.check');
+
 Route::group([
     'prefix' => 'admin',
     'middleware' => CheckAdmin::class,
