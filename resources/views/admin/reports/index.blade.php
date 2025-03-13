@@ -50,6 +50,11 @@
                            class="text-blue-600 hover:underline">
                            Edit
                         </a>
+
+                        <a href="{{route('admin.report.view', $report->id)}}" 
+                            class="text-blue-600 hover:underline">
+                            View
+                         </a>
                         <!-- Add more actions as needed (delete, edit, etc.) -->
                     </td>
                 </tr>
