@@ -42,6 +42,10 @@
                 <strong>Location:</strong> 
                 {{ $offender->location ?? 'Unknown' }}
             </span>
+            <span class="text-xs px-3 py-1 bg-gray-100 rounded-full text-gray-800">
+                <strong>Description:</strong> 
+                {{ $offender->crime_description ?? 'Unknown' }}
+            </span>
         </div>
 
         <!-- View Evidence Button (Only if there's evidence) -->
