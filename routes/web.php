@@ -5,6 +5,8 @@ use App\Http\Controllers\PrimaryController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SearchController;
 
+use App\Http\Controllers\ReportController;
+
 use App\Http\Middleware\CheckAdmin;
 
 use Illuminate\Support\Facades\Route;
@@ -27,10 +29,10 @@ Route::group([
     Route::get('/offenders/{offender:id}/edit', [AdminController::class, 'offenderEdit'])->name('admin.offender.edit'); 
     Route::put('/offenders/{offender:id}/update', [AdminController::class, 'offenderUpdate'])->name('admin.offender.update'); 
 
-    Route::get('/reports', [AdminController::class, 'reports'])->name('admin.reports'); 
-    
-    Route::get('/reports/{report:id}/edit', [AdminController::class, 'reportEdit'])->name('admin.report.edit'); 
-    Route::put('/reports/{report:id}/update', [AdminController::class, 'reportUpdate'])->name('admin.report.update'); 
+    Route::get('/reports', ReportController::class)->name('admin.reports'); 
+    Route::get('/reports/{report:id}', [ReportController::class,'view'])->name('admin.report.view'); 
+    Route::get('/reports/{report:id}/edit', [ReportController::class, 'edit'])->name('admin.report.edit'); 
+    Route::put('/reports/{report:id}/update', [ReportController::class, 'update'])->name('admin.report.update'); 
     // Add more admin routes here
 });
 
