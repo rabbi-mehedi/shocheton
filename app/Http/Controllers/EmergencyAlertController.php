@@ -28,7 +28,7 @@ class EmergencyAlertController extends Controller
         ]);
 
         // Optionally link to an authenticated user, if you have Auth in place
-        $data['user_id'] = Auth::id(); // or set null if user not logged in
+        $data['user_id'] = auth()->user()->id; // or set null if user not logged in
 
         // Create new record
         $alert = EmergencyAlert::create($data);
@@ -37,5 +37,20 @@ class EmergencyAlertController extends Controller
             'success' => true,
             'alert'   => $alert,
         ]);
+    }
+
+    public function destroy($id)
+    {
+        // Optionally check if (Auth::user()->isAdmin()) to ensure only admins can do this
+        if (!auth()->user()->isAdmin()) {
+            abort(403, 'Unauthorized');
+        }
+
+        $alert = EmergencyAlert::findOrFail($id);
+        $alert->delete();
+
+        return redirect()
+            ->route('emergency.index')
+            ->with('status', 'Alert deleted successfully!');
     }
 }

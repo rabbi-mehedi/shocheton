@@ -11,6 +11,7 @@ class EmergencyAlert extends Model
         'user_id',
         'lat',
         'lng',
+        'address',
     ];
 
     // If you have a users table, you can define a relationship:
