@@ -48,7 +48,7 @@
 
 {{-- Google Maps JS (replace YOUR_API_KEY) --}}
 <script
-    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdSsNxBZzj0YHjJlulOmiKqF1VsA0HZFs&callback=initMap"
     async
     defer
 ></script>
