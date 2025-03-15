@@ -6,10 +6,19 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SearchController;
 
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\EmergencyAlertController;
 
 use App\Http\Middleware\CheckAdmin;
 
 use Illuminate\Support\Facades\Route;
+
+Route::get('/emergency', EmergencyAlertController::class)
+    ->middleware(['auth', 'verified'])
+    ->name('emergency.index');
+
+Route::post('/emergency', [EmergencyAlertController::class, 'store'])
+    ->middleware(['auth', 'verified'])
+    ->name('emergency.store');
 
 Route::get('/', PrimaryController::class)->name('home');
 Route::get('/how-it-works', [PrimaryController::class, 'explain'])->name('explain');
@@ -40,9 +49,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/map', function () {
-    return view('map');
-})->name('map');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

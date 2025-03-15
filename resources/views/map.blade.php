@@ -1,120 +1,92 @@
-<!DOCTYPE html>
-<!--
- @license
- Copyright 2019 Google LLC. All Rights Reserved.
- SPDX-License-Identifier: Apache-2.0
--->
-<html>
-  <head>
-    <style>
-      /**
-       * @license
-       * Copyright 2019 Google LLC. All Rights Reserved.
-       * SPDX-License-Identifier: Apache-2.0
-       */
-      /** 
-       * Always set the map height explicitly to define the size of the div element
-       * that contains the map. 
-       */
-      #map {
-        height: 100%;
-      }
+{{-- resources/views/emergency/index.blade.php --}}
+@extends('layouts.user')
 
-      /* Optional: Makes the sample page fill the window. */
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
+@section('page_title', 'Emergency Alerts')
 
-      .custom-map-control-button {
-        background-color: #fff;
-        border: 0;
-        border-radius: 2px;
-        box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
-        margin: 10px;
-        padding: 0 0.5em;
-        font: 400 18px Roboto, Arial, sans-serif;
-        overflow: hidden;
-        height: 40px;
-        cursor: pointer;
-      }
-      .custom-map-control-button:hover {
-        background: rgb(235, 235, 235);
-      }
-    </style>
-    <title>Geolocation</title>
-    <script>
-      /**
-       * @license
-       * Copyright 2019 Google LLC. All Rights Reserved.
-       * SPDX-License-Identifier: Apache-2.0
-       */
-      // Note: This example requires that you consent to location sharing when
-      // prompted by your browser. If you see the error "The Geolocation service
-      // failed.", it means you probably did not give permission for the browser to
-      // locate you.
-      let map, infoWindow;
+@section('page_content')
 
-      function initMap() {
-        map = new google.maps.Map(document.getElementById("map"), {
-          center: { lat: -34.397, lng: 150.644 },
-          zoom: 6,
-        });
-        infoWindow = new google.maps.InfoWindow();
+    <div class="container">
+        <h1>Emergency Alerts</h1>
 
-        const locationButton = document.createElement("button");
+        <button id="alertBtn" class="bg-red-600 text-white px-4 py-2 rounded">
+            Send Emergency Alert
+        </button>
 
-        locationButton.textContent = "Pan to Current Location";
-        locationButton.classList.add("custom-map-control-button");
-        map.controls[google.maps.ControlPosition.TOP_CENTER].push(
-          locationButton
-        );
-        locationButton.addEventListener("click", () => {
-          // Try HTML5 geolocation.
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-              (position) => {
-                const pos = {
-                  lat: position.coords.latitude,
-                  lng: position.coords.longitude,
-                };
+        <div id="map" style="width: 100%; height: 500px; margin-top: 1rem;"></div>
+    </div>
 
-                infoWindow.setPosition(pos);
-                infoWindow.setContent("Location found.");
-                infoWindow.open(map);
-                map.setCenter(pos);
-              },
-              () => {
-                handleLocationError(true, infoWindow, map.getCenter());
-              }
-            );
-          } else {
-            // Browser doesn't support Geolocation
-            handleLocationError(false, infoWindow, map.getCenter());
-          }
-        });
-      }
-
-      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-        infoWindow.setPosition(pos);
-        infoWindow.setContent(
-          browserHasGeolocation
-            ? "Error: The Geolocation service failed."
-            : "Error: Your browser doesn't support geolocation."
-        );
-        infoWindow.open(map);
-      }
-
-      window.initMap = initMap;
+    {{-- Google Maps JS (replace YOUR_API_KEY) --}}
+    <script async
+    defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdSsNxBZzj0YHjJlulOmiKqF1VsA0HZFs&callback=initMap">
     </script>
-  </head>
-  <body>
-    <div id="map"></div>
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdSsNxBZzj0YHjJlulOmiKqF1VsA0HZFs&callback=initMap&v=weekly&solution_channel=GMP_CCS_geolocation_v2"
-      defer
-    ></script>
-  </body>
-</html>
+
+    <script>
+        // We'll embed existing alerts from the server in a JS variable.
+        const existingAlerts = @json($alerts);
+
+        // This function is called automatically once Google Maps script loads
+        function initMap() {
+            // Center map on some default location (e.g., Dhaka)
+            const mapCenter = { lat: 23.8103, lng: 90.4125 };
+
+            const map = new google.maps.Map(document.getElementById('map'), {
+                center: mapCenter,
+                zoom: 12,
+            });
+
+            // Place markers for existing alerts
+            existingAlerts.forEach(alert => {
+                new google.maps.Marker({
+                    position: {
+                        lat: parseFloat(alert.lat),
+                        lng: parseFloat(alert.lng)
+                    },
+                    map: map,
+                    icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+                    title: 'Emergency Alert'
+                });
+            });
+        }
+
+        // Capture geolocation on button click, then POST to store route
+        document.getElementById('alertBtn').addEventListener('click', () => {
+            if (!navigator.geolocation) {
+                alert('Geolocation is not supported by your browser.');
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+
+                    // Send lat/lng to our store route
+                    fetch("{{ route('emergency.store') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        },
+                        body: JSON.stringify({ lat, lng })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        alert('Emergency Alert Sent!');
+                        // Reload to see new marker (or add marker dynamically)
+                        location.reload();
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('Error sending alert.');
+                    });
+                },
+                error => {
+                    console.error('Geolocation error:', error);
+                    alert('Could not get your location.');
+                },
+                { enableHighAccuracy: true, timeout: 15000 }
+            );
+        });
+    </script>
+@endsection
