@@ -17,8 +17,14 @@ Route::get('/emergency', EmergencyAlertController::class)
     ->name('emergency.index');
 
 Route::post('/emergency', [EmergencyAlertController::class, 'store'])
-    ->middleware(['auth', 'verified'])
-    ->name('emergency.store');
+->middleware(['auth', 'verified'])
+->name('emergency.store');
+
+
+Route::delete('/emergency/{id}', [EmergencyAlertController::class, 'destroy'])
+->name('emergency.destroy')
+->middleware('auth'); // Ensure only authenticated (and possibly admin) can delete
+
 
 Route::get('/', PrimaryController::class)->name('home');
 Route::get('/how-it-works', [PrimaryController::class, 'explain'])->name('explain');
