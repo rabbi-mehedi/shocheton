@@ -13,7 +13,6 @@ use App\Http\Middleware\CheckAdmin;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/emergency', EmergencyAlertController::class)
-    ->middleware(['auth', 'verified'])
     ->name('emergency.index');
 
 Route::post('/emergency', [EmergencyAlertController::class, 'store'])
@@ -21,7 +20,6 @@ Route::post('/emergency', [EmergencyAlertController::class, 'store'])
 ->name('emergency.store');
 
 Route::get('/emergency/locate', [EmergencyAlertController::class, 'locate'])
-->middleware(['auth', 'verified'])
 ->name('emergency.locate');
 
 
