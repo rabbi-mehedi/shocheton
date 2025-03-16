@@ -16,16 +16,33 @@
             Hello, {{ Auth::user()->name }}!
         </h1>
 
-        <h2 class="text-xl font-semibold text-gray-700 mb-2">Emergency Alerts</h2>
-
-        {{-- Button to send an alert --}}
-        <button id="alertBtn" class="bg-red-600 text-white px-4 py-2 rounded">
-            Send Emergency Alert
-        </button>
+        <h2 class="text-xl font-bold text-gray-700 mb-2">Emergency Alerts</h2>
+        <section class="flex flex-col">
+            <small class="uppercase font-semibold text-gray-500">Locate your nearest :</small>
+            <div class="flex mt-3">
+                <a 
+                  href="{{ route('emergency.locate', ['type' => 'police']) }}" 
+                  class="px-3 py-2 font-bold text-sm mr-2 uppercase text-gray-400 border-box border-2 rounded-full border-gray-500 hover:border-red-600"
+                >
+                    Police Station
+                </a>
+                <a 
+                  href="{{ route('emergency.locate', ['type' => 'hospital']) }}" 
+                  class="px-3 py-2 font-bold text-sm mx-2 uppercase text-gray-400 border-box border-2 rounded-full border-gray-500 hover:border-red-600"
+                >
+                    Hospital
+                </a>
+            </div>
+        </section>
+        
+        
 
         {{-- Map container --}}
         <div id="map" class="w-full h-64 sm:h-96 mt-4 border border-gray-300 rounded"></div>
-
+        {{-- Button to send an alert --}}
+        <button id="alertBtn" class="bg-red-600 w-full font-bold text-white px-4 py-2 rounded">
+            SEND EMERGENCY ALERT
+        </button>
         {{-- List of alerts (most recent first) --}}
         <h3 class="text-lg font-semibold text-gray-800 mt-6">Recent Alerts</h3>
         <ul class="mt-2 space-y-2">
@@ -68,7 +85,7 @@
 
 {{-- Google Maps JS (replace YOUR_API_KEY) --}}
 <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdSsNxBZzj0YHjJlulOmiKqF1VsA0HZFs&callback=initMap"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdSsNxBZzj0YHjJlulOmiKqF1VsA0HZFs&map_ids=f96874cf6e8badfa&callback=initMap"
     async
     defer
 ></script>
@@ -96,6 +113,7 @@
         const map = new google.maps.Map(document.getElementById('map'), {
             center: mapCenter,
             zoom: 12,
+            mapId: "f96874cf6e8badfa",
         });
 
         // Place blinking markers for existing alerts

@@ -20,6 +20,10 @@ Route::post('/emergency', [EmergencyAlertController::class, 'store'])
 ->middleware(['auth', 'verified'])
 ->name('emergency.store');
 
+Route::get('/emergency/locate', [EmergencyAlertController::class, 'locate'])
+->middleware(['auth', 'verified'])
+->name('emergency.locate');
+
 
 Route::delete('/emergency/{id}', [EmergencyAlertController::class, 'destroy'])
 ->name('emergency.destroy')

@@ -53,4 +53,12 @@ class EmergencyAlertController extends Controller
             ->route('emergency.index')
             ->with('status', 'Alert deleted successfully!');
     }
+
+    public function locate(Request $request)
+    {
+        // You can do any extra checks or pass data if needed
+        // For now, we just return the blade
+        return view('emergency.locate');
+    }
+
 }
