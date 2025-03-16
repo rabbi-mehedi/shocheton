@@ -6,13 +6,14 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\EmergencyAlert;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class EmergencyAlertController extends Controller
 {
     public function __invoke()
     {
-        // Get all alerts. In a real scenario, you might only get recent alerts, etc.
-        $alerts = EmergencyAlert::all();
+        // Fetch alerts from the last hour
+        $alerts = EmergencyAlert::where('created_at', '>=', Carbon::now()->subHour())->get();
         
         // Pass them to the view
         return view('map', compact('alerts'));
