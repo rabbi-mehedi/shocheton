@@ -31,9 +31,9 @@
 
 </div>
 
-<!-- Load Google Maps + Places library, but no callback param. -->
+<!-- Load Google Maps + Places + Geometry library, but no callback param. -->
 <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdSsNxBZzj0YHjJlulOmiKqF1VsA0HZFs&libraries=places"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCdSsNxBZzj0YHjJlulOmiKqF1VsA0HZFs&libraries=places,geometry"
     async
     defer
 ></script>
@@ -46,6 +46,7 @@
 
     // The placeType is either 'police' or 'hospital' from query string
     const placeType = "{{ $serviceType }}"; 
+    let userPosition = null; // We'll store the user’s location here for distance calculations
 
     // 1) We'll wait for the window to load before calling initMap
     window.addEventListener('load', () => {
@@ -60,20 +61,22 @@
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 position => {
-                    const userPos = {
+                    userPosition = {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude
                     };
-                    setupMap(userPos);
+                    setupMap(userPosition);
                 },
                 error => {
                     console.warn('Geolocation error:', error);
+                    userPosition = fallbackCenter;
                     setupMap(fallbackCenter); // fallback
                 },
                 { enableHighAccuracy: true, timeout: 15000 }
             );
         } else {
             // If no geolocation support, use fallback
+            userPosition = fallbackCenter;
             setupMap(fallbackCenter);
         }
     }
@@ -83,8 +86,6 @@
         map = new google.maps.Map(document.getElementById('map'), {
             center: centerPos,
             zoom: 14,
-            // Example: If you want to apply your custom style:
-            // styles: [ /* your custom style JSON here */ ]
         });
 
         infowindow = new google.maps.InfoWindow();
@@ -117,16 +118,22 @@
         resultsContainer.innerHTML = ''; // clear initial placeholder
 
         if (status === google.maps.places.PlacesServiceStatus.OK && results && results.length > 0) {
+            // Insert a small summary above the listings
+            const summaryEl = document.createElement('p');
+            summaryEl.classList.add('text-sm', 'font-semibold', 'text-gray-800', 'mb-2');
+            summaryEl.textContent = `We found ${results.length} result(s) near your location.`;
+            resultsContainer.appendChild(summaryEl);
+
             results.forEach(place => {
                 createMarker(place);
 
                 // Create a card-like element for each place
                 const placeEl = document.createElement('div');
-                placeEl.classList.add('p-3', 'border', 'rounded', 'bg-white');
+                placeEl.classList.add('p-3', 'border', 'rounded', 'bg-white', 'mb-2');
 
                 // Place Name
                 const nameEl = document.createElement('h3');
-                nameEl.classList.add('font-bold');
+                nameEl.classList.add('font-bold', 'text-base');
                 nameEl.textContent = place.name || 'Unnamed Place';
 
                 // Address (vicinity)
@@ -134,31 +141,75 @@
                 addrEl.classList.add('text-sm', 'text-gray-700');
                 addrEl.textContent = place.vicinity || '';
 
+                // Distance (if geometry is available)
+                const distEl = document.createElement('div');
+                distEl.classList.add('text-sm', 'text-gray-700', 'mt-1');
+
+                if (place.geometry && place.geometry.location && userPosition) {
+                    const userLatLng = new google.maps.LatLng(userPosition.lat, userPosition.lng);
+                    const placeLatLng = place.geometry.location;
+
+                    // computeDistanceBetween returns distance in meters
+                    const distMeters = google.maps.geometry.spherical.computeDistanceBetween(userLatLng, placeLatLng);
+                    const distKm = (distMeters / 1000).toFixed(2);
+                    distEl.textContent = `Distance: ${distKm} km away`;
+                } else {
+                    distEl.textContent = `Distance: Unknown`;
+                }
+
                 // Placeholder for phone number
                 const phoneEl = document.createElement('div');
                 phoneEl.classList.add('text-sm', 'text-gray-600');
                 phoneEl.textContent = 'Loading phone...';
 
+                // A container for the action buttons
+                const actionsEl = document.createElement('div');
+                actionsEl.classList.add('mt-2', 'flex', 'gap-2');
+
                 // A clickable "Call" button
                 const callBtn = document.createElement('a');
                 callBtn.classList.add(
-                    'inline-block', 
                     'bg-green-600', 
                     'text-white', 
                     'px-3', 
                     'py-1', 
                     'rounded', 
-                    'text-sm', 
-                    'mt-2'
+                    'text-sm'
                 );
                 callBtn.textContent = 'Call';
                 callBtn.href = '#'; // will update with phone number if found
 
+                // "Get Directions" button
+                const directionsBtn = document.createElement('a');
+                directionsBtn.classList.add(
+                    'bg-blue-600', 
+                    'text-white', 
+                    'px-3', 
+                    'py-1', 
+                    'rounded', 
+                    'text-sm'
+                );
+                directionsBtn.textContent = 'Get Directions';
+                directionsBtn.target = '_blank'; // open in new tab or app
+                // If we have a place geometry, we can link to google maps directions
+                if (place.geometry && place.geometry.location) {
+                    const lat = place.geometry.location.lat();
+                    const lng = place.geometry.location.lng();
+                    directionsBtn.href = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`;
+                } else {
+                    directionsBtn.href = '#';
+                }
+
+                // Append to actionsEl
+                actionsEl.appendChild(callBtn);
+                actionsEl.appendChild(directionsBtn);
+
                 // Append to placeEl
                 placeEl.appendChild(nameEl);
                 placeEl.appendChild(addrEl);
+                placeEl.appendChild(distEl);
                 placeEl.appendChild(phoneEl);
-                placeEl.appendChild(callBtn);
+                placeEl.appendChild(actionsEl);
 
                 // Append placeEl to the results container
                 resultsContainer.appendChild(placeEl);
