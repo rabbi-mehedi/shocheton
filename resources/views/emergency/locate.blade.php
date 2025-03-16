@@ -14,7 +14,7 @@
     @endphp
 
     <h1 class="text-2xl font-bold text-gray-900 mb-4">
-        Nearby {{ $serviceLabel }} Stations
+        Nearby {{ $serviceLabel }} Facilities
     </h1>
 
     <p class="text-gray-600 text-sm mb-4">
