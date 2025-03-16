@@ -13,7 +13,11 @@
     <div class="container mx-auto mt-6 px-4">
         {{-- Personalized user info (assuming you're using Auth::user()) --}}
         <h1 class="text-2xl font-bold text-gray-900 mb-4">
-            Hello, {{ Auth::user()->name }}!
+            Welcome to সচেতন Map,<br>@if (auth()->user())
+                {{ auth()->user()->name }}
+            @else
+                
+            @endif
         </h1>
 
         <h2 class="text-xl font-bold text-gray-700 mb-2">Emergency Alerts</h2>
@@ -59,7 +63,7 @@
                     </div>
 
                     {{-- If user is admin, show delete button --}}
-                    @if(Auth::user()->isAdmin())
+                    @if(auth()->user() && auth()->user()->isAdmin())
                         <form 
                             action="{{ route('emergency.destroy', $alert->id) }}" 
                             method="POST" 
