@@ -13,8 +13,8 @@
     <div class="container mx-auto mt-6 px-4">
         {{-- Personalized user info (assuming you're using Auth::user()) --}}
         <h1 class="md:text-2xl text-xl font-bold text-gray-900 mb-4">
-            Welcome to সচেতন Map<br>@if (auth()->user())
-                {{ auth()->user()->name }}
+            Welcome to সচেতন Map @if (auth()->user())
+            <br>{{ auth()->user()->name }}
             @else
                 
             @endif
