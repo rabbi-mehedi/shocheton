@@ -1,12 +1,15 @@
 @extends('layouts.user')
 @section('page_title','কিভাবে এটি কাজ করে | How it Works')
 @section('page_content')
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
 <div class="w-full flex justify-center flex-col items-center bg-white">
     <a href="{{route('home')}}">
         <img src="{{asset('wide_logo.png')}}" alt="shocheton.org" class="my-6 h-[10vh]">
     </a>
+
     <!-- Header Section -->
-    <header class="bg-red-600 text-white py-6">
+    <header class="bg-red-600 text-white py-6 mb-2">
         <div class="container mx-auto px-4 text-center">
             <h1 class="text-xl md:text-2xl font-bold uppercase tracking-wider">
                 How It Works
@@ -15,23 +18,27 @@
 
     </header>
 
-    <div class="flex justify-center my-4">
-        <button id="btn-bangla" class="relative top-0 right-0 px-4 py-2 mx-2 bg-red-600 text-white">বাংলা</button>
-        <button id="btn-english" class="relative top-0 right-0 px-4 py-2 mx-2 bg-red-600 text-white">English</button>
+     <!-- Language Switcher Buttons -->
+     <div class="mb-4">
+        <button id="banglaBtn" class="px-4 py-2 bg-red-600 text-white rounded-l">বাংলা</button>
+        <button id="englishBtn" class="px-4 py-2 bg-red-600 text-white rounded-r">English</button>
     </div>
 
     <!-- Main Container -->
-    <main>
-        <!-- Section 1: Bangla Content (Visible by Default) -->
-        <div id="bangla-content" class="bg-white shadow-md p-6 rounded-lg mb-8">
-            <div class="container mx-auto px-4 py-8">
-                <h2 class="text-2xl font-extrabold text-gray-800 uppercase tracking-wide mb-4">
-                    সচেতন.org - কিভাবে প্ল্যাটফর্ম কাজ করে
-                </h2>
+    <main class="container mx-auto px-4 py-8">
+
+        <!-- Section 1: Bangla How it Works (Visible by Default)-->
+        <div id="banglaSection" class="bg-white shadow-md p-6 rounded-lg mb-8">
+            <h2 class="text-2xl font-extrabold text-gray-800 uppercase tracking-wide mb-4 accordion-header">
+                সচেতন.org - কিভাবে প্ল্যাটফর্ম কাজ করে 
+                <i class="fas fa-chevron-down ml-2 rotate-0 accordion-arrow"></i>
+            </h2>
+                
+            <div class="accordion-content hidden">
                 <p class="text-gray-700 mb-4">
-                    <strong>সচেতন.org</strong> হলো একটি উন্মুক্ত ডিজিটাল প্ল্যাটফর্ম, যেখানে সাধারণ মানুষ যৌন নির্যাতন বা অপরাধের ঘটনা সম্পর্কে তথ্য জমা দিতে পারে...
+                    <strong>সচেতন.org</strong> হলো একটি উন্মুক্ত ডিজিটাল প্ল্যাটফর্ম, যেখানে সাধারণ মানুষ যৌন নির্যাতন বা অপরাধের ঘটনা সম্পর্কে তথ্য জমা দিতে পারে। আমাদের লক্ষ্য হলো সমাজে যৌন অপরাধ সম্পর্কে সচেতনতা বৃদ্ধি করা এবং অপরাধীদের সম্পর্কে যাচাই করা সহজ করা।
                 </p>
-                <!-- Bangla Steps List -->
+                <!-- Steps List -->
                 <ol class="list-decimal list-inside space-y-4 text-gray-700">
                     <li>
                         <span class="font-semibold">অ্যাকাউন্ট তৈরি / লগইন:</span>  
@@ -65,70 +72,78 @@
                     <li><strong>সহায়তা:</strong> ভুক্তভোগীদের পাশে দাঁড়ানো এবং প্রয়োজনীয় আইনগত ও মনোসামাজিক সাপোর্টের সাথে সংযুক্ত করা।</li>
                 </ul>
             </div>
+        </div>
 
-            <div class="container mx-auto px-4 py-8">
-                <h2 class="text-2xl font-extrabold text-gray-800 uppercase tracking-wide mb-4">
-                প্রশ্নোত্তর - প্রায়শই জিজ্ঞাসিত প্রশ্ন
-                </h2>
-                <ol class="list-decimal list-inside space-y-4 text-gray-700">
+        <!-- Section 2: Bangla FAQ (Visible by Default) -->
+        <div id="banglaFAQ" class="bg-white shadow-md p-6 rounded-lg mb-8">
+            <h2 class="text-2xl font-extrabold text-gray-800 uppercase tracking-wide mb-4 accordion-header">
+                প্রায়শই জিজ্ঞাসিত প্রশ্নাবলী
+                <i class="fas fa-chevron-down ml-2 rotate-0 accordion-arrow"></i>
+            </h2>
+            <div class="accordion-content hidden">
+                <!-- FAQ List -->
+                <ul class="list-decimal list-inside space-y-4 text-gray-700">
                     <li>
-                        <span class="font-semibold">তথ্য প্রকাশের আগে কীভাবে যাচাই করা হয়?</span>  
-                        প্রতিটি জমাকৃত তথ্য আমাদের মডারেশন টিম দ্বারা পর্যালোচনা করা হয়। তবে, আমরা ব্যবহারকারীদের যথাযথ প্রমাণ সরবরাহ করতে উৎসাহিত করি এবং বিশ্বাসযোগ্যতার অভাবে কোনো তথ্য প্রত্যাখ্যান করার অধিকার সংরক্ষণ করি।
+                        <span class="font-semibold">তথ্য প্রকাশের আগে কিভাবে যাচাই করা হয়?</span>  
+                        প্রতিটি রিপোর্ট একটি পর্যালোচনা প্রক্রিয়ার মধ্য দিয়ে যায়, যেখানে মডারেশন টিম সেটি পর্যালোচনা করে। তবে, আমরা ব্যবহারকারীদের প্রমাণিত প্রমাণ জমা দিতে উত্সাহিত করি এবং বিশ্বাসযোগ্যতা না থাকা রিপোর্টগুলো বাতিল করতে পারি।
                     </li>
                     <li>
                         <span class="font-semibold">কেউ কি রিপোর্ট জমা দিতে পারে?</span>  
-                        হ্যাঁ, ভুক্তভোগী, সাক্ষী, আত্মীয় বা উদ্বিগ্ন ব্যক্তিরা রিপোর্ট জমা দিতে পারেন। তবে, মিথ্যা রিপোর্ট করা কঠোরভাবে নিষিদ্ধ।
+                        হ্যাঁ, রিপোর্ট ভুক্তভোগী, সাক্ষী, আত্মীয় বা উদ্বিগ্ন ব্যক্তি জমা দিতে পারে। তবে, মিথ্যা রিপোর্ট জমা দেওয়া কঠোরভাবে নিষিদ্ধ।
                     </li>
                     <li>
-                        <span class="font-semibold">রিপোর্ট জমা দিতে কী তথ্য প্রয়োজন?</span>  
-                        অভিযুক্ত ব্যক্তির নাম, অবস্থান, ঘটনার বিবরণ এবং যেকোনো সহায়ক প্রমাণ (ছবি, ভিডিও, নথি ইত্যাদি) সরবরাহ করতে হবে।
+                        <span class="font-semibold">রিপোর্ট জমা দেওয়ার জন্য কি তথ্য দরকার?</span>  
+                        আপনাকে অভিযুক্ত ব্যক্তির নাম, স্থান, ঘটনা সম্পর্কে বর্ণনা এবং যে কোনো প্রমাণ (ফটো, ভিডিও, ডকুমেন্ট ইত্যাদি) প্রদান করতে হবে।
                     </li>
                     <li>
-                        <span class="font-semibold">কেউ ভুলভাবে অভিযুক্ত হলে কী হবে?</span>  
-                        যদি কেউ মনে করেন যে তিনি ভুলভাবে তালিকাভুক্ত হয়েছেন, তবে তিনি যথাযথ প্রমাণসহ আপিল করতে পারেন। আমরা অভিযোগ পর্যালোচনা করে যাচাইযোগ্য হলে ভুল তথ্য অপসারণ করব।
+                        <span class="font-semibold">যদি কেউ মিথ্যা অভিযুক্ত হয়, তাহলে কি হবে?</span>  
+                        যেসব ব্যক্তি মনে করেন তাদের বিরুদ্ধে ভুলভাবে অভিযোগ করা হয়েছে, তারা প্রমাণ সহ আপিল করতে পারেন। আমরা এমন দাবিগুলি পর্যালোচনা করব এবং মিথ্যা অভিযোগগুলি অপসারণ করব যদি সেগুলি যাচাই হয়।
                     </li>
                     <li>
-                        <span class="font-semibold">আমি যদি রিপোর্ট জমা দেই তবে কি আমার পরিচয় গোপন থাকবে?</span>  
-                        হ্যাঁ, আপনি চাইলে গোপন থাকতে পারেন। তবে, আমরা সুস্পষ্টতার জন্য যোগাযোগের তথ্য সরবরাহ করার পরামর্শ দিই।
+                        <span class="font-semibold">যদি আমি রিপোর্ট জমা দিই, তাহলে কি আমার পরিচয় সুরক্ষিত থাকবে?</span>  
+                        হ্যাঁ, আপনি আপনার পরিচয় গোপন রাখতে পারেন। তবে, যদি আরও স্পষ্টতার প্রয়োজন হয়, তবে আমরা যোগাযোগের বিস্তারিত দেওয়ার পরামর্শ দিই।
                     </li>
                     <li>
-                        <span class="font-semibold">আমি কি অতীতের কোনো ঘটনা রিপোর্ট করতে পারি?</span>  
-                        হ্যাঁ, পুরনো ঘটনা রিপোর্ট করা যেতে পারে, তবে সাম্প্রতিক এবং ভালভাবে ডকুমেন্টেড রিপোর্ট বেশি গ্রহণযোগ্য হবে।
+                        <span class="font-semibold">কীভাবে পূর্ববর্তী ঘটনা রিপোর্ট করা যাবে?</span>  
+                        হ্যাঁ, অতীতের ঘটনা রিপোর্ট করা যেতে পারে, তবে যতো বেশি সাম্প্রতিক এবং ভালোভাবে ডকুমেন্ট করা হবে, ততো বেশি বিশ্বাসযোগ্যতা পাবে।
                     </li>
                     <li>
-                        <span class="font-semibold">যদি আমি আমার নাম এই ওয়েবসাইটে দেখতে পাই তবে কী করব?</span>  
-                        আপনি একটি পর্যালোচনার অনুরোধ করতে পারেন এবং অভিযুক্ত তথ্য চ্যালেঞ্জ করার জন্য যথাযথ প্রমাণ জমা দিতে পারেন। আমরা ন্যায়বিচার ও নির্ভুলতা নিশ্চিত করতে প্রতিশ্রুতিবদ্ধ।
+                        <span class="font-semibold">যদি আমি আমার নাম এই সাইটে দেখতে পাই, তবে কি করব?</span>  
+                        আপনি একটি পর্যালোচনার আবেদন করতে পারেন এবং অভিযোগ চ্যালেঞ্জ করার জন্য প্রমাণ সরবরাহ করতে পারেন। আমরা ন্যায়বিচার এবং সঠিকতা নিশ্চিত করতে প্রতিশ্রুতিবদ্ধ।
                     </li>
                     <li>
-                        <span class="font-semibold">আইন প্রয়োগকারী সংস্থার সাথে যোগাযোগ করা কি এই ওয়েবসাইট ব্যবহারের পরিবর্তে ভালো?</span>  
-                        অবশ্যই। আমরা ভুক্তভোগীদের সরাসরি পুলিশের কাছে মামলা দায়ের করার জন্য উৎসাহিত করি। এই রেজিস্ট্রি জনসচেতনতামূলক এবং এটি আইনি ব্যবস্থার বিকল্প নয়।
+                        <span class="font-semibold">আমি কি এই সাইট ব্যবহার না করে সরাসরি আইন প্রয়োগকারী সংস্থার সাথে যোগাযোগ করতে পারি?</span>  
+                        অবশ্যই। আমরা ভুক্তভোগীদের আইনগত পদক্ষেপ নেওয়ার জন্য সরাসরি পুলিশে রিপোর্ট করার জন্য উত্সাহিত করি। এই রেজিস্ট্রি জনসাধারণের সচেতনতার জন্য, আইন ব্যবস্থার বিকল্প নয়।
                     </li>
                     <li>
-                        <span class="font-semibold">আমি কিভাবে কাউকে রিপোর্ট করার সময় নিজের নিরাপত্তা নিশ্চিত করতে পারি?</span>  
-                        যদি প্রতিশোধের আশঙ্কা থাকে, তবে রিপোর্টটি বেনামে জমা দিন এবং সংবেদনশীল ব্যক্তিগত তথ্য প্রকাশ করা থেকে বিরত থাকুন।
+                        <span class="font-semibold">আমি যদি কাউকে রিপোর্ট করতে চাই, তবে কীভাবে আমার নিরাপত্তা নিশ্চিত করব?</span>  
+                        যদি আপনি প্রতিশোধের ভয়ে থাকেন, তবে আপনি অজ্ঞাতনামা রিপোর্ট জমা দেওয়ার কথা ভাবতে পারেন এবং সংবেদনশীল ব্যক্তিগত তথ্য প্রকাশ করা এড়িয়ে চলুন।
                     </li>
                     <li>
-                        <span class="font-semibold">এই প্ল্যাটফর্ম ব্যবহারকারীদের জন্য কী আইনি ঝুঁকি রয়েছে?</span>  
-                        ব্যবহারকারীদের অবশ্যই নিশ্চিত করতে হবে যে তাদের জমাকৃত তথ্য সত্য। মিথ্যা অভিযোগের ফলে মানহানি মামলাসহ আইনি ব্যবস্থা নেওয়া হতে পারে।
+                        <span class="font-semibold">এই প্ল্যাটফর্ম ব্যবহারকারীদের জন্য কোন আইনি ঝুঁকি রয়েছে?</span>  
+                        ব্যবহারকারীদের নিশ্চিত করতে হবে যে তাদের জমা দেওয়া তথ্য সঠিক। মিথ্যা অভিযোগ আইনি ফলস্বরূপ আসতে পারে, যার মধ্যে মানহানির মামলা অন্তর্ভুক্ত হতে পারে।
                     </li>
                     <li>
-                        <span class="font-semibold">আমি কীভাবে আমার তথ্য এই ওয়েবসাইট থেকে অপসারণ করতে পারি?</span>  
-                        ভুল তথ্য প্রমাণ করার জন্য যথাযথ প্রমাণসহ আপিল জমা দেওয়া যেতে পারে। আমাদের টিম পর্যালোচনা করে প্রয়োজনীয় ব্যবস্থা নেবে।
+                        <span class="font-semibold">কীভাবে আমি এই সাইট থেকে আমার তথ্য মুছে ফেলতে পারি?</span>  
+                        যারা মনে করেন তাদের তথ্য ভুলভাবে তালিকাভুক্ত হয়েছে, তারা প্রাসঙ্গিক প্রমাণ সহ একটি আপিল করতে পারেন। আমাদের টিম এটি মূল্যায়ন করবে এবং প্রয়োজনীয় পদক্ষেপ নেবে।
                     </li>
-                <ol>
+                </ul>
             </div>
         </div>
 
-        <!-- Section 2: English Content (Hidden by Default) -->
-        <div id="english-content" style="display: none;" class="bg-white shadow-md p-6 rounded-lg mb-8">
-            <div class="container mx-auto px-4 py-8">
-                <h2 class="text-2xl font-extrabold text-gray-800 uppercase tracking-wide mb-4">
-                    Shocheton.org - How This Platform Works
-                </h2>
+
+        <!-- Section 3: English How it Works (Hidden by Default) -->
+        <div id="englishSection" class="bg-white shadow-md p-6 rounded-lg mb-8 hidden">
+            <h2 class="text-2xl font-extrabold text-gray-800 uppercase tracking-wide mb-4 accordion-header">
+                Shocheton.org - How This Platform Works
+                <i class="fas fa-chevron-down ml-2 rotate-0 accordion-arrow"></i>
+            </h2>
+
+            <div class="accordion-content hidden">
                 <p class="text-gray-700 mb-4">
-                    <strong>Shocheton.org</strong> is an open digital platform where the public can submit information about sexual offenses or abuse...
+                    <strong>Shocheton.org</strong> is an open digital platform where the public can submit information about sexual offenses or abuse. Our goal is to increase awareness of sexual crimes in society and make it easier to check records about offenders.
                 </p>
-                <!-- English Steps List -->
+                <!-- Steps List -->
                 <ol class="list-decimal list-inside space-y-4 text-gray-700">
                     <li>
                         <span class="font-semibold">Create an Account / Login:</span>  
@@ -162,17 +177,21 @@
                     <li><strong>Support & Resources:</strong> Stands by survivors, connecting them with legal aid and psychosocial support organizations.</li>
                 </ul>
             </div>
+        </div>
 
-            <div class="container mx-auto px-4 py-8">
-                <h2 class="text-2xl font-extrabold text-gray-800 uppercase tracking-wide mb-4">
-                    FAQ - FREQUENTLY ASKED QUESTIONS
-                </h2>
+        <!-- Section 4: English FAQ (Hidden by Default) -->
+        <div id="englishFAQ"class="bg-white shadow-md p-6 rounded-lg mb-8 hidden">
+            <h2 class="text-2xl font-extrabold text-gray-800 uppercase tracking-wide mb-4 accordion-header">
+                Frequently Asked Questions
+                <i class="fas fa-chevron-down ml-2 rotate-0 accordion-arrow"></i>
+            </h2>
 
-                <!-- English Questions List -->
-                <ol class="list-decimal list-inside space-y-4 text-gray-700">
-                    <li> 
+            <div class="accordion-content hidden">
+                <!-- FAQ List -->
+                <ul class="list-decimal list-inside space-y-4 text-gray-700">
+                    <li>
                         <span class="font-semibold">How is information verified before being published?</span>  
-                        - Each submission undergoes a review process by the moderation team before being posted. However, we encourage users to provide supporting evidence, and we reserve the right to reject submissions lacking credibility.
+                        Each submission undergoes a review process by the moderation team before being posted. However, we encourage users to provide supporting evidence, and we reserve the right to reject submissions lacking credibility.
                     </li>
                     <li>
                         <span class="font-semibold">Can anyone submit a report?</span>  
@@ -214,23 +233,59 @@
                         <span class="font-semibold">How can I remove my information from this site?</span>  
                         Individuals can submit an appeal with relevant evidence proving the inaccuracy of the report. Our team will assess and take necessary action.
                     </li>
-                </ol>
+                </ul>
             </div>
         </div>
 
     </main>
+</div>
 
-    <script>
-        document.getElementById('btn-bangla').addEventListener('click', function() {
-            document.getElementById('bangla-content').style.display = 'block';
-            document.getElementById('english-content').style.display = 'none';
-        });
+<script>
+    // Language switching functionality
+    document.getElementById('banglaBtn').addEventListener('click', function() {
+        document.getElementById('banglaSection').classList.remove('hidden');
+        document.getElementById('banglaFAQ').classList.remove('hidden');
+        document.getElementById('englishSection').classList.add('hidden');
+        document.getElementById('englishFAQ').classList.add('hidden');
+    });
 
-        document.getElementById('btn-english').addEventListener('click', function() {
-            document.getElementById('bangla-content').style.display = 'none';
-            document.getElementById('english-content').style.display = 'block';
+    document.getElementById('englishBtn').addEventListener('click', function() {
+        document.getElementById('banglaSection').classList.add('hidden');
+        document.getElementById('banglaFAQ').classList.add('hidden');
+        document.getElementById('englishSection').classList.remove('hidden');
+        document.getElementById('englishFAQ').classList.remove('hidden');
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const accordionHeaders = document.querySelectorAll('.accordion-header');
+
+    accordionHeaders.forEach(header => {
+        header.addEventListener('click', function () {
+            const content = this.nextElementSibling;
+            content.classList.toggle('show');
+
+            const icon = this.querySelector('.accordion-arrow');
+            icon.classList.toggle('rotate-180');
+            });
         });
-    </script>
-    
+    })
+
+</script>
 @endsection
 
+<style>
+.accordion-header {
+    cursor: pointer;
+}
+
+.accordion-content {
+    display: none;
+}
+
+.accordion-content.show {
+    display: block;
+}
+.accordion-arrow.rotate-180 {
+    transform: rotate(180deg);
+}
+</style>
