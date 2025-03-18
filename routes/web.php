@@ -69,4 +69,8 @@ Route::get('/forums', function () {
     return view('forums');
 })->name('forums');
 
+Route::get('/resources', function () {
+    return view('resources');
+})->name('resources');
+
 require __DIR__.'/auth.php';
