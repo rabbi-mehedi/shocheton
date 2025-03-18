@@ -1,3 +1,4 @@
+{{-- resources/views/report.blade.php --}}
 @extends('layouts.user')
 @section('page_title','Report an Incident | Bangladesh Sex Offenders Registry')
 @section('page_content')
@@ -305,7 +306,7 @@
                     class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400"
                 >
 
-                <!-- Witness Information (Hide if user is already witness) -->
+                <!-- Witness Information (Hide if user is already victim) -->
                 <div id="witnessInfoSection" class="mt-6 p-4 bg-gray-50 rounded-lg">
                     <h3 class="text-md font-semibold mb-2 text-gray-800">
                         সাক্ষীর তথ্য (যদি থাকে) / Witness Information (if any)
@@ -439,6 +440,14 @@
                     placeholder="অতিরিক্ত তথ্য লিখুন / Any extra details..."
                 ></textarea>
 
+                <!-- reCAPTCHA Checkbox -->
+                <div class="mt-6">
+                    <label class="block text-sm font-semibold text-gray-700">
+                        Please verify you are not a robot:
+                    </label>
+                    <div class="g-recaptcha" data-sitekey="6LftofgqAAAAAGRy8zFG3z0Mo4eG5wcuTT_Wye4w"></div>
+                </div>
+
                 <!-- Navigation & Submit -->
                 <div class="flex justify-between mt-6">
                     <button 
@@ -461,6 +470,9 @@
 
     </div> <!-- End Container -->
 </div>
+
+<!-- Load the reCAPTCHA API script -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
