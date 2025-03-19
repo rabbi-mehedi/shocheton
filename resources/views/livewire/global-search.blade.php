@@ -1,4 +1,4 @@
-<div class="flex items-center justify-center w-full max-w-lg mx-auto mb-8">
+<div class="flex items-center justify-center w-full max-w-lg mx-auto my-8">
     <div class="relative w-full">
         <div class="shadow-md rounded-full overflow-hidden">
             <!-- Debounce for 300ms -->

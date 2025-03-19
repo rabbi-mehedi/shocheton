@@ -226,6 +226,11 @@ class PrimaryController extends Controller
         return view('thankyou'); // or redirect()->route('thank.you.page')->with('success','Report submitted!');
     }
 
+    public function sentToMail(User $user)
+    {
+        return view('verifyUser.email',compact('user'));
+    }
+
     public function explain()
     {
         return view('explain');

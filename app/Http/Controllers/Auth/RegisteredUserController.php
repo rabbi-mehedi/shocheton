@@ -32,20 +32,23 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'phone' => ['required', 'string', 'max:20'], // Added phone validation
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
-
+        
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $request->phone, // Storing phone from request
             'password' => Hash::make($request->password),
-            'phone' => '01000000000'
         ]);
+        
 
         event(new Registered($user));
+        $user->sendEmailVerificationNotification();
+        return redirect()->route('verification.to.mail',$user->id);
+        // Auth::login($user);
 
-        Auth::login($user);
-
-        return redirect(route('dashboard', absolute: false));
+        // return redirect(route('dashboard', absolute: false));
     }
 }

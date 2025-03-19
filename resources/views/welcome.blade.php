@@ -42,24 +42,32 @@
             </div>
     
             <div class="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4 my-6">
-                <!-- "How it Works" link -->
-                <a 
-                    href="{{ route('explain') }}"
-                    class="font-bold underline text-gray-800"
-                >
-                    কিভাবে এটি কাজ করে | How it Works
-                </a>
-            
                 @guest
-                <!-- Login button -->
-                <a 
-                    href="{{ route('login') }}" 
-                    class="bg-black text-white px-4 py-2 rounded font-semibold"
-                >
-                    প্রবেশ | Login
-                </a>
+                <div class="flex flex-col md:flex-row md:space-x-2 space-y-2 md:space-y-0">
+                    <a 
+                        href="{{ route('register') }}" 
+                        class="w-full md:w-auto bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded font-semibold text-center"
+                    >
+                        সাইন আপ | Sign Up
+                    </a>
+                    <a 
+                        href="{{ route('login') }}" 
+                        class="w-full md:w-auto bg-black hover:bg-gray-900 text-white px-4 py-2 rounded font-semibold text-center"
+                    >
+                        প্রবেশ | Login
+                    </a>
+                </div>
                 @endguest
+
+
             </div>
+            <!-- "How it Works" link -->
+            <a 
+                href="{{ route('explain') }}"
+                class="font-bold underline text-gray-800"
+            >
+                কিভাবে এটি কাজ করে | How it Works
+            </a>
             
     
             <livewire:global-search></livewire:global-search>

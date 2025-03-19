@@ -30,6 +30,7 @@ Route::delete('/emergency/{id}', [EmergencyAlertController::class, 'destroy'])
 
 Route::get('/', PrimaryController::class)->name('home');
 Route::get('/how-it-works', [PrimaryController::class, 'explain'])->name('explain');
+Route::get('/registration/verify-email/{user:id}', [PrimaryController::class, 'sentToMail'])->name('verification.to.mail');
 Route::get('/submit-report', [PrimaryController::class,'showForm'])->name('submit.report.form');
 Route::post('/submit-report', [PrimaryController::class,'submitForm'])->name('submit.report');
 Route::get('/search', [SearchController::class, 'results'])->name('search.results');
