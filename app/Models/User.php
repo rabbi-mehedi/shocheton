@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
+use App\Models\EmergencyContact;
+
 class User extends Authenticatable implements HasMedia
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -63,5 +65,10 @@ class User extends Authenticatable implements HasMedia
     public function reports()
     {
         return $this->hasMany(Report::class);
+    }
+
+    public function emergencyContacts()
+    {
+        return $this->hasMany(EmergencyContact::class);
     }
 }

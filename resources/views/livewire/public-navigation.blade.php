@@ -48,6 +48,10 @@
                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     Profile
                                 </a>
+                                <a href="{{route('emergency.contacts')}}" 
+                                   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    Emergency Contacts
+                                </a>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <button type="submit" 
@@ -110,6 +114,9 @@
                     <div class="border-t border-gray-200 pt-2">
                         <a href="{{ route('profile.edit') }}" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-700 hover:bg-gray-100">
                             Profile
+                        </a>
+                        <a href="{{route('emergency.contacts')}}" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-700 hover:bg-gray-100">
+                            Emergency Contacts
                         </a>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf

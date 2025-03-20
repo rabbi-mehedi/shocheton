@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PrimaryController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\EmergencyContactController;
 
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\EmergencyAlertController;
@@ -64,6 +65,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    //Emergency Contact Routes
+    Route::get('/emergency-contacts', EmergencyContactController::class)->name('emergency.contacts');
+    Route::get('/emergency-contacts/create', [EmergencyContactController::class,'create'])->name('emergency_contacts.create');
+    Route::post('/emergency-contacts/create', [EmergencyContactController::class,'store'])->name('emergency_contacts.store');
+    Route::get('/emergency-contacts/{emergencyContact}/edit', [EmergencyContactController::class,'edit'])->name('emergency_contacts.edit');
+    Route::put('/emergency-contacts/edit', [EmergencyContactController::class,'update'])->name('emergency_contacts.update');
+    Route::delete('/emergency-contacts/{emergencyContact}/delete', [EmergencyContactController::class,'destroy'])->name('emergency_contacts.destroy');
+
 });
 
 Route::get('/forums', function () {
