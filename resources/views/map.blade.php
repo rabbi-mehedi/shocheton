@@ -53,6 +53,7 @@
             @endauth w-full font-bold text-white px-4 py-2 rounded">
                 SEND EMERGENCY ALERT
             </button>
+            @auth
             <div class="mt-4 flex items-center">
                 <input 
                     type="checkbox" 
@@ -65,6 +66,10 @@
                     Alert all of my emergency contacts
                 </label>
             </div>
+            @endauth
+            @guest
+            <label for="alertEmergencyContacts" class="text-sm text-gray-700 ">You need to have a সচেতন Account<br>to use this feature. <a href="{{route('register')}}" class="text-red-700 font-bold">Sign Up</a></label>
+            @endguest
     
             {{-- List of alerts (most recent first) --}}
             <h3 class="text-lg font-semibold text-gray-800 mt-6">Recent Alerts</h3>
