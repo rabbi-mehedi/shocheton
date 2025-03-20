@@ -70,7 +70,23 @@ Route::get('/forums', function () {
 })->name('forums');
 
 Route::get('/resources', function () {
-    return view('resources');
+    return view('resources.index');
 })->name('resources');
+
+Route::get('resources/legal', function () {
+    return view('resources.legal');
+})->name('legal');
+
+Route::get('/resources/medical', function () {
+    return view('resources.medical');
+})->name('medical');
+
+Route::get('resources/psychological', function () {
+    return view('resources.psychological');
+})->name('psychological');
+
+Route::get('resources/ngo', function () {
+    return view('resources.ngo');
+})->name('ngo');
 
 require __DIR__.'/auth.php';
