@@ -53,7 +53,7 @@ class EmergencyContactController extends Controller
         ]);
         
         // Redirect back to the index (or wherever you wish) with a success message
-        return redirect()->route('emergency_contacts.index')
+        return redirect()->route('emergency.contacts')
                          ->with('success', 'Emergency contact added successfully.');
     }
 
