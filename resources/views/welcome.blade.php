@@ -40,7 +40,28 @@
                     I WANT TO REPORT AN INCIDENT
                 </a>
             </div>
-    
+            @guest
+                <!-- Map Button -->
+                <div class="text-center mb-6">
+                    <a 
+                        href="{{ route('map') }}"
+                        class="inline-block bg-red-600 hover:bg-red-700 text-center text-white font-semibold uppercase px-6 py-3 rounded shadow"
+                    >
+                        সচেতন MAP
+                    </a>
+                </div>
+            @endguest
+            @auth
+                <!-- Map Button -->
+                <div class="text-center mb-6">
+                    <a 
+                        href="{{ route('map') }}"
+                        class="inline-block bg-red-600 hover:bg-red-700 text-center text-white font-semibold uppercase px-6 py-3 rounded shadow"
+                    >
+                        SEND EMERGENCY GPS ALERT
+                    </a>
+                </div>
+            @endauth
             <div class="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4 my-6">
                 @guest
                 <div class="flex flex-col md:flex-row md:space-x-2 space-y-2 md:space-y-0">

@@ -13,8 +13,8 @@ use App\Http\Middleware\CheckAdmin;
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/emergency', EmergencyAlertController::class)
-    ->name('emergency.index');
+Route::get('/map', EmergencyAlertController::class)
+    ->name('map');
 
 Route::post('/emergency', [EmergencyAlertController::class, 'store'])
 ->middleware(['auth', 'verified'])

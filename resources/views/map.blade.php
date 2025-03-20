@@ -43,48 +43,69 @@
 
         {{-- Map container --}}
         <div id="map" class="w-full h-64 sm:h-96 mt-4 border border-gray-300 rounded"></div>
-        {{-- Button to send an alert --}}
-        <button id="alertBtn" class="bg-red-600 w-full font-bold text-white px-4 py-2 rounded">
-            SEND EMERGENCY ALERT
-        </button>
-        {{-- List of alerts (most recent first) --}}
-        <h3 class="text-lg font-semibold text-gray-800 mt-6">Recent Alerts</h3>
-        <ul class="mt-2 space-y-2">
-            @forelse($alerts as $alert)
-                <li class="p-2 border-b border-gray-200 flex items-center justify-between">
-                    <div>
-                        <strong>Alert #{{ $alert->id }}</strong> 
-                        <span class="text-sm text-gray-600">
-                            ({{ $alert->created_at->format('d M Y, h:i A') }})
-                        </span>
-                        <div class="text-sm text-gray-800">
-                            Location: lat {{ $alert->lat }}, lng {{ $alert->lng }}
+            {{-- Button to send an alert --}}
+            <button id="alertBtn" @guest
+                disabled
+            @endguest class="@guest
+                bg-gray-400
+            @endguest @auth
+                bg-red-600
+            @endauth w-full font-bold text-white px-4 py-2 rounded">
+                SEND EMERGENCY ALERT
+            </button>
+            <div class="mt-4 flex items-center">
+                <input 
+                    type="checkbox" 
+                    id="alertEmergencyContacts" 
+                    name="alertEmergencyContacts" 
+                    value="1" 
+                    class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
+                />
+                <label for="alertEmergencyContacts" class="ml-2 text-sm text-gray-700">
+                    Alert all of my emergency contacts
+                </label>
+            </div>
+    
+            {{-- List of alerts (most recent first) --}}
+            <h3 class="text-lg font-semibold text-gray-800 mt-6">Recent Alerts</h3>
+            <ul class="mt-2 space-y-2">
+                @forelse($alerts as $alert)
+                    <li class="p-2 border-b border-gray-200 flex items-center justify-between">
+                        <div>
+                            <strong>Alert #{{ $alert->id }}</strong> 
+                            <span class="text-sm text-gray-600">
+                                ({{ $alert->created_at->format('d M Y, h:i A') }})
+                            </span>
+                            <div class="text-sm text-gray-800">
+                                Location: lat {{ $alert->lat }}, lng {{ $alert->lng }}
+                            </div>
                         </div>
-                    </div>
 
-                    {{-- If user is admin, show delete button --}}
-                    @if(auth()->user() && auth()->user()->isAdmin())
-                        <form 
-                            action="{{ route('emergency.destroy', $alert->id) }}" 
-                            method="POST" 
-                            onsubmit="return confirm('Are you sure you want to delete this alert?');"
-                        >
-                            @csrf
-                            @method('DELETE')
-                            <button 
-                                type="submit" 
-                                class="bg-red-500 text-white text-sm px-3 py-1 rounded hover:bg-red-600"
+                        {{-- If user is admin, show delete button --}}
+                        @if(auth()->user() && auth()->user()->isAdmin())
+                            <form 
+                                action="{{ route('emergency.destroy', $alert->id) }}" 
+                                method="POST" 
+                                onsubmit="return confirm('Are you sure you want to delete this alert?');"
                             >
-                                Delete
-                            </button>
-                        </form>
-                    @endif
-                </li>
-            @empty
-                <li class="text-sm text-gray-500">No alerts yet.</li>
-            @endforelse
-        </ul>
-    </div>
+                                @csrf
+                                @method('DELETE')
+                                <button 
+                                    type="submit" 
+                                    class="bg-red-500 text-white text-sm px-3 py-1 rounded hover:bg-red-600"
+                                >
+                                    Delete
+                                </button>
+                            </form>
+                        @endif
+                    </li>
+                @empty
+                    <li class="text-sm text-gray-500">No alerts yet.</li>
+                @endforelse
+            </ul>
+        </div>
+        {{-- Checkbox to confirm alerting emergency contacts --}}
+
 </div>
 
 {{-- Google Maps JS (replace YOUR_API_KEY) --}}
