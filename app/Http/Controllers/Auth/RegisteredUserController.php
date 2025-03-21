@@ -34,7 +34,23 @@ class RegisteredUserController extends Controller
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'phone' => ['required', 'string', 'max:20'], // Added phone validation
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            // reCAPTCHA v2 response
+            'g-recaptcha-response' => 'required',
         ]);
+
+        // 2. Verify reCAPTCHA
+        $captchaResponse = $request->input('g-recaptcha-response');
+        $secretKey       = env('RECAPTCHA_KEY'); // Replace with your actual secret key
+        $verifyURL       = 'https://www.google.com/recaptcha/api/siteverify';
+
+        $response = file_get_contents($verifyURL . '?secret=' . $secretKey . '&response=' . $captchaResponse);
+        $responseKeys = json_decode($response, true);
+
+        if (!$responseKeys['success']) {
+            return back()
+                ->withErrors(['captcha' => 'ReCAPTCHA validation failed. Please try again.'])
+                ->withInput();
+        }
         
         $user = User::create([
             'name' => $request->name,

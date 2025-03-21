@@ -1,4 +1,10 @@
 <x-guest-layout>
+    @error('captcha')
+    <div class="bg-red-100 border border-red-200 text-red-800 px-4 py-2 rounded mb-4">
+        {{ $message }}
+    </div>
+    @enderror
+
     @if ($errors->any())
         <div class="bg-red-50 border border-red-200 p-4 rounded text-red-600">
             <ul class="list-disc list-inside">
@@ -8,7 +14,6 @@
             </ul>
         </div>
     @endif
-
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
@@ -51,7 +56,13 @@
                           name="password_confirmation" required autocomplete="new-password" />
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
-
+        <!-- reCAPTCHA Checkbox -->
+        <div class="mt-6">
+            <label class="block text-sm font-semibold text-gray-700">
+                Please verify you are not a robot:
+            </label>
+            <div class="g-recaptcha" data-sitekey="6LftofgqAAAAAGRy8zFG3z0Mo4eG5wcuTT_Wye4w"></div>
+        </div>
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
                 {{ __('Already registered?') }}

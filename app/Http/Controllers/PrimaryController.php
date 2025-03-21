@@ -87,7 +87,7 @@ class PrimaryController extends Controller
 
         // 2. Verify reCAPTCHA
         $captchaResponse = $request->input('g-recaptcha-response');
-        $secretKey       = '6LftofgqAAAAAASS5cixltVzep-A8W4LB0TVCqez'; // Replace with your actual secret key
+        $secretKey       = env('RECAPTCHA_KEY'); // Replace with your actual secret key
         $verifyURL       = 'https://www.google.com/recaptcha/api/siteverify';
 
         $response = file_get_contents($verifyURL . '?secret=' . $secretKey . '&response=' . $captchaResponse);
