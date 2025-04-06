@@ -5,6 +5,9 @@ use App\Http\Controllers\PrimaryController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\EmergencyContactController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\VoteController;
 
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\EmergencyAlertController;
@@ -66,6 +69,18 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    // Create a new post (thread)
+    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+
+    // The vote endpoint expects a POST parameter 'vote' (1 for upvote, -1 for downvote)
+    Route::post('/posts/{post}/vote', [VoteController::class, 'vote'])->name('posts.vote');
+
+    // Create a new comment or reply on a post
+    Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
+
+    // Vote on a comment
+    Route::post('/comments/{comment}/vote', [CommentController::class, 'vote'])->name('comments.vote');
+
     //Emergency Contact Routes
     Route::get('/emergency-contacts', EmergencyContactController::class)->name('emergency.contacts');
     Route::get('/emergency-contacts/create', [EmergencyContactController::class,'create'])->name('emergency_contacts.create');
@@ -76,8 +91,6 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::get('/forums', function () {
-    return view('forums');
-})->name('forums');
+Route::get('/forums',PostController::class)->name('forums.index');
 
 require __DIR__.'/auth.php';
