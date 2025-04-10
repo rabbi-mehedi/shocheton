@@ -18,6 +18,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/map', EmergencyAlertController::class)
     ->name('map');
+    
+// heatmap (testing)
+use App\Http\Controllers\HeatmapController;
+Route::get('/heatmap', [HeatmapController::class, 'index']);
+
+Route::get('/emergency', EmergencyAlertController::class)
+    ->name('emergency.index');
 
 Route::post('/emergency', [EmergencyAlertController::class, 'store'])
 ->middleware(['auth', 'verified'])
@@ -94,3 +101,5 @@ Route::middleware('auth')->group(function () {
 Route::get('/forums',PostController::class)->name('forums.index');
 
 require __DIR__.'/auth.php';
+
+
