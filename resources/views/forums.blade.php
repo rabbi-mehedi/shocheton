@@ -94,16 +94,19 @@
                     </div>
                     <p class="text-gray-800 mb-3">{!! nl2br(e($post->content)) !!}</p>
 
-                    <!-- Voting -->
+                    <!-- Voting and actions -->
                     <div class="flex items-center gap-4 text-sm mb-3">
                         <div class="flex items-center space-x-1">
-                            <button class="text-gray-600 hover:text-red-600" onclick="votePost({{ $post->id }}, 1, this)">⬆</button>
+                            <button class="text-gray-600 hover:text-red-600" onclick="votePost({{ $post->id }}, 1, this)" aria-label="Upvote post {{ $post->id }}">⬆</button>
                             <span class="vote-count">
                                 {{ $post->votes->where('vote', 1)->count() - $post->votes->where('vote', -1)->count() }}
                             </span>
-                            <button class="text-gray-600 hover:text-blue-600" onclick="votePost({{ $post->id }}, -1, this)">⬇</button>
+                            <button class="text-gray-600 hover:text-blue-600" onclick="votePost({{ $post->id }}, -1, this)" aria-label="Downvote post {{ $post->id }}">⬇</button>
                         </div>
-                        <button onclick="reportPost({{ $post->id }})" class="text-gray-500 hover:text-yellow-600">🚩 Report</button>
+                        <button onclick="confirmReportPost({{ $post->id }})" class="text-gray-500 hover:text-yellow-600" aria-label="Report post {{ $post->id }}">🚩 Report</button>
+                        @if (auth()->check() && auth()->user()->id == $post->user->id)
+                            <button onclick="confirmDeletePost({{ $post->id }})" class="text-gray-500 hover:text-red-600" aria-label="Delete post {{ $post->id }}">🗑️ Delete</button>
+                        @endif
                     </div>
 
                     <!-- Comments Section -->
@@ -137,6 +140,11 @@
                     </div>
                 </div>
                 @endforeach
+
+                <!-- Pagination -->
+                <div class="mt-6">
+                    {{ $posts->links() }}
+                </div>
             </div>
         </div>
     </div>
@@ -215,9 +223,42 @@
         commentsDiv.classList.toggle('hidden');
     }
 
+    // Confirmation dialog for reporting a post
+    function confirmReportPost(postId) {
+        if (confirm('Are you sure you want to report this post?')) {
+            reportPost(postId);
+        }
+    }
+
     // Placeholder for report functionality
     function reportPost(postId) {
         alert('Post ' + postId + ' reported.');
+    }
+
+    // Confirmation dialog for deleting a post
+    function confirmDeletePost(postId) {
+        if (confirm('Are you sure you want to delete this post?')) {
+            deletePost(postId);
+        }
+    }
+
+    function deletePost(postId) {
+        fetch(`/posts/${postId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('post-' + postId).remove();
+            } else {
+                alert('Unable to delete the post.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
     }
 </script>
 

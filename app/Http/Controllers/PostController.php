@@ -49,4 +49,18 @@ class PostController extends Controller
 
         return redirect()->back()->with('success', 'Post created successfully!');
     }
+
+    // Delete a post via AJAX
+    public function destroy($id)
+    {
+        $post = Post::findOrFail($id);
+
+        // Make sure the authenticated user owns the post
+        if ($post->user_id !== Auth::id()) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
+        }
+
+        $post->delete();
+        return response()->json(['success' => true]);
+    }
 }

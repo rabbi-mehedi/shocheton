@@ -78,7 +78,7 @@ Route::middleware('auth')->group(function () {
 
     // Create a new post (thread)
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
-
+    Route::delete('/posts/{id}', [PostController::class, 'destroy']);
     // The vote endpoint expects a POST parameter 'vote' (1 for upvote, -1 for downvote)
     Route::post('/posts/{post}/vote', [VoteController::class, 'vote'])->name('posts.vote');
 
