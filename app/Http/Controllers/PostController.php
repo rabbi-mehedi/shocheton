@@ -29,6 +29,7 @@ class PostController extends Controller
     // Store a new post (called when the user clicks “Post”)
     public function store(Request $request)
     {
+        // Remove the anonymous field from validation since it will be handled separately
         $validated = $request->validate([
             'content'    => 'required|string',
             'category'   => 'nullable|string|max:255',
@@ -40,6 +41,9 @@ class PostController extends Controller
 
         $data = $validated;
         $data['user_id'] = Auth::id();
+        
+        // Handle the anonymous checkbox - will be true if checkbox is checked, false otherwise
+        $data['anonymous'] = $request->has('anonymous');
 
         // Create the post
         $post = Post::create($data);

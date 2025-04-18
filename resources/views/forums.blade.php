@@ -47,6 +47,60 @@
                 </button>
             </div>
 
+            <!-- Error Messages -->
+            @if ($errors->any())
+            <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-medium text-red-800">There were errors with your submission:</h3>
+                        <ul class="mt-1 text-sm text-red-700 list-disc list-inside">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+            @if(session('success'))
+            <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-4">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-green-700">{{ session('success') }}</p>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+            <!-- Authentication Notice -->
+            @guest
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-blue-700">
+                            You need to <a href="{{ route('login') }}" class="font-medium underline text-blue-700 hover:text-blue-600">log in</a> or <a href="{{ route('register') }}" class="font-medium underline text-blue-700 hover:text-blue-600">create an account</a> to post in the forums.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            @endguest
+
             <!-- New Post Form -->
             <div id="newPostContainer" class="hidden transition-all duration-300">
                 <form id="newPostForm" action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data" class="mb-6 border border-gray-300 p-4 rounded-lg bg-white shadow-sm">
@@ -64,6 +118,14 @@
                                 @endforeach
                             </datalist>
                         </div>
+                    </div>
+                    
+                    <!-- Anonymous Option -->
+                    <div class="mt-3">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="anonymous" class="rounded border-gray-300 text-red-600 shadow-sm focus:border-red-300 focus:ring focus:ring-red-200 focus:ring-opacity-50">
+                            <span class="ml-2 text-sm text-gray-700">Keep me anonymous</span>
+                        </label>
                     </div>
                     
                     <section class="flex justify-between w-full mt-2">
@@ -119,7 +181,7 @@
                         <div class="flex items-center mb-2">
                             <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" class="object-cover w-10 h-10 rounded-full mr-3" alt="User">
                             <div>
-                                <p class="font-semibold text-gray-800">{{ $post->user->name }}</p>
+                                <p class="font-semibold text-gray-800">{{ $post->getAuthorDisplayName() }}</p>
                                 <p class="text-xs text-gray-500">{{ $post->created_at->diffForHumans() }}</p>
                             </div>
                         </div>
@@ -387,17 +449,28 @@
 
     // Toggle new post form
     document.getElementById('togglePostForm').addEventListener('click', function() {
-        const form = document.getElementById('newPostContainer');
-        form.classList.toggle('hidden');
-        if (!form.classList.contains('hidden')) {
-            form.scrollIntoView({ behavior: 'smooth' });
-        }
+        @guest
+            // For non-authenticated users, redirect to login
+            window.location.href = "{{ route('login') }}?redirect={{ urlencode(request()->fullUrl()) }}";
+        @else
+            // For authenticated users, show the form
+            const form = document.getElementById('newPostContainer');
+            form.classList.toggle('hidden');
+            if (!form.classList.contains('hidden')) {
+                form.scrollIntoView({ behavior: 'smooth' });
+            }
+        @endguest
     });
 
     // Handle empty state "Start a New Thread" button
     if (document.getElementById('startFirstPost')) {
         document.getElementById('startFirstPost').addEventListener('click', function() {
-            document.getElementById('togglePostForm').click();
+            @guest
+                // For non-authenticated users, redirect to login
+                window.location.href = "{{ route('login') }}?redirect={{ urlencode(request()->fullUrl()) }}";
+            @else
+                document.getElementById('togglePostForm').click();
+            @endguest
         });
     }
 
