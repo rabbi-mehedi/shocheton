@@ -516,15 +516,46 @@
             },
             body: JSON.stringify({ vote: voteValue })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (response.status === 401) {
+                // User is not authenticated - ask to log in
+                if (confirm('You need to be logged in to vote. Would you like to log in now?')) {
+                    window.location.href = "{{ route('login') }}?redirect={{ urlencode(request()->fullUrl()) }}";
+                }
+                return { success: false };
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.success) {
-                // Update the displayed vote count using the difference between upvotes and downvotes.
+                // Update the displayed vote count using the difference between upvotes and downvotes
                 const voteCountElem = btn.parentElement.querySelector('.vote-count');
                 voteCountElem.textContent = data.upvotes - data.downvotes;
+                
+                // Provide visual feedback for the user's vote
+                const upvoteBtn = btn.parentElement.querySelector('button[aria-label^="Upvote"]');
+                const downvoteBtn = btn.parentElement.querySelector('button[aria-label^="Downvote"]');
+                
+                // Reset both buttons to default style
+                upvoteBtn.className = 'text-gray-600 hover:text-red-600';
+                downvoteBtn.className = 'text-gray-600 hover:text-blue-600';
+                
+                // Highlight the selected vote button if it wasn't toggled off
+                if (data.upvotes > 0 || data.downvotes > 0) {
+                    if (voteValue === 1 && data.upvotes > data.downvotes) {
+                        upvoteBtn.className = 'text-red-600 hover:text-red-700';
+                    } else if (voteValue === -1 && data.downvotes > data.upvotes) {
+                        downvoteBtn.className = 'text-blue-600 hover:text-blue-700';
+                    }
+                }
+            } else if (data.message) {
+                // Show error message if any
+                console.error('Vote error:', data.message);
             }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            console.error('Error:', error);
+        });
     }
 
     // Toggle comments for a post
