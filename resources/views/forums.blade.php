@@ -68,14 +68,16 @@
                     
                     <section class="flex justify-between w-full mt-2">
                         <div class="flex w-full">
-                            <!-- File Attachment -->
-                            <div class="mt-4">
-                                <label for="attachment" class="hover:cursor-pointer block text-sm text-gray-700">
+                            <!-- Multiple Media Upload -->
+                            <div class="mt-4 relative">
+                                <label for="media-upload" class="hover:cursor-pointer block text-sm text-gray-700">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-paperclip">
                                         <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
                                     </svg>
+                                    <span id="media-count" class="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center hidden">0</span>
                                 </label>
-                                <input type="file" name="attachment" id="attachment" class="hidden w-full mt-2 p-2 border border-gray-300 rounded-lg" accept="image/*, .pdf, .docx, .xlsx">
+                                <input type="file" name="media[]" id="media-upload" class="hidden" multiple accept="image/*, video/*, audio/*, application/pdf, .doc, .docx, .xlsx">
+                                <div id="file-preview" class="hidden mt-2 p-2 border border-gray-200 rounded-lg bg-gray-50"></div>
                             </div>
                             
                             <!-- Location Icon and Name -->
@@ -132,6 +134,64 @@
                         @endif
                         
                         <p class="text-gray-800 mb-3">{!! nl2br(e($post->content)) !!}</p>
+
+                        <!-- Media Attachments -->
+                        @if($post->getMedia('images')->count() > 0 || $post->getMedia('videos')->count() > 0 || $post->getMedia('audio')->count() > 0 || $post->getMedia('documents')->count() > 0)
+                        <div class="media-container mb-4">
+                            <!-- Images Gallery -->
+                            @if($post->getMedia('images')->count() > 0)
+                            <div class="images-gallery grid grid-cols-2 md:grid-cols-3 gap-2 mb-3">
+                                @foreach($post->getMedia('images') as $image)
+                                <a href="{{ $image->getUrl() }}" target="_blank" class="block">
+                                    <img src="{{ $image->getUrl() }}" alt="Image attachment" class="w-full h-32 object-cover rounded-md hover:opacity-90 transition">
+                                </a>
+                                @endforeach
+                            </div>
+                            @endif
+
+                            <!-- Videos -->
+                            @if($post->getMedia('videos')->count() > 0)
+                            <div class="videos-container space-y-3 mb-3">
+                                @foreach($post->getMedia('videos') as $video)
+                                <div class="video-wrapper">
+                                    <video controls class="w-full rounded-md" preload="metadata">
+                                        <source src="{{ $video->getUrl() }}" type="{{ $video->mime_type }}">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                </div>
+                                @endforeach
+                            </div>
+                            @endif
+
+                            <!-- Audio -->
+                            @if($post->getMedia('audio')->count() > 0)
+                            <div class="audio-container space-y-2 mb-3">
+                                @foreach($post->getMedia('audio') as $audio)
+                                <div class="audio-wrapper bg-gray-100 rounded-md p-2">
+                                    <audio controls class="w-full">
+                                        <source src="{{ $audio->getUrl() }}" type="{{ $audio->mime_type }}">
+                                        Your browser does not support the audio tag.
+                                    </audio>
+                                </div>
+                                @endforeach
+                            </div>
+                            @endif
+
+                            <!-- Documents -->
+                            @if($post->getMedia('documents')->count() > 0)
+                            <div class="documents-container grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                @foreach($post->getMedia('documents') as $document)
+                                <a href="{{ $document->getUrl() }}" target="_blank" class="flex items-center p-2 bg-gray-100 rounded-md hover:bg-gray-200 transition">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                    </svg>
+                                    <span class="text-sm text-gray-700 truncate">{{ $document->file_name }}</span>
+                                </a>
+                                @endforeach
+                            </div>
+                            @endif
+                        </div>
+                        @endif
 
                         <!-- Voting and actions -->
                         <div class="flex items-center gap-4 text-sm mb-3">
@@ -234,6 +294,96 @@
 <script>
     // CSRF token for AJAX requests
     const csrfToken = '{{ csrf_token() }}';
+
+    // File Upload and Preview
+    const mediaUpload = document.getElementById('media-upload');
+    const filePreview = document.getElementById('file-preview');
+    const mediaCount = document.getElementById('media-count');
+
+    if (mediaUpload) {
+        mediaUpload.addEventListener('change', function() {
+            // Reset preview
+            filePreview.innerHTML = '';
+            filePreview.classList.remove('hidden');
+            
+            if (this.files.length > 0) {
+                // Show the count of files
+                mediaCount.textContent = this.files.length;
+                mediaCount.classList.remove('hidden');
+                
+                // Preview container
+                const previewWrapper = document.createElement('div');
+                previewWrapper.className = 'grid grid-cols-2 sm:grid-cols-3 gap-2';
+                
+                // Add a clear button
+                const clearButton = document.createElement('button');
+                clearButton.textContent = 'Clear Files';
+                clearButton.className = 'text-xs text-red-600 hover:text-red-700 mb-2 underline';
+                clearButton.onclick = function(e) {
+                    e.preventDefault();
+                    mediaUpload.value = '';
+                    filePreview.classList.add('hidden');
+                    mediaCount.classList.add('hidden');
+                    filePreview.innerHTML = '';
+                };
+                filePreview.appendChild(clearButton);
+                
+                // Process each file
+                Array.from(this.files).forEach(file => {
+                    const fileType = file.type;
+                    const fileSize = (file.size / (1024 * 1024)).toFixed(2); // size in MB
+                    
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'p-2 border border-gray-200 rounded-md text-xs';
+                    
+                    // Different preview based on file type
+                    if (fileType.startsWith('image/')) {
+                        const img = document.createElement('img');
+                        img.className = 'h-20 w-full object-cover rounded-md mb-1';
+                        img.file = file;
+                        fileItem.appendChild(img);
+                        
+                        const reader = new FileReader();
+                        reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
+                        reader.readAsDataURL(file);
+                    } else if (fileType.startsWith('video/')) {
+                        fileItem.innerHTML = `<div class="flex items-center justify-center h-20 bg-gray-100 rounded-md mb-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>`;
+                    } else if (fileType.startsWith('audio/')) {
+                        fileItem.innerHTML = `<div class="flex items-center justify-center h-20 bg-gray-100 rounded-md mb-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                            </svg>
+                        </div>`;
+                    } else {
+                        // Documents and other files
+                        fileItem.innerHTML = `<div class="flex items-center justify-center h-20 bg-gray-100 rounded-md mb-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                            </svg>
+                        </div>`;
+                    }
+                    
+                    // File info
+                    const fileInfo = document.createElement('div');
+                    fileInfo.className = 'truncate';
+                    fileInfo.innerHTML = `<span class="block truncate">${file.name}</span><span class="text-gray-500">${fileSize} MB</span>`;
+                    fileItem.appendChild(fileInfo);
+                    
+                    previewWrapper.appendChild(fileItem);
+                });
+                
+                filePreview.appendChild(previewWrapper);
+            } else {
+                filePreview.classList.add('hidden');
+                mediaCount.classList.add('hidden');
+            }
+        });
+    }
 
     // Toggle new post form
     document.getElementById('togglePostForm').addEventListener('click', function() {

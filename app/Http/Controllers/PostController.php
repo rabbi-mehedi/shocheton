@@ -31,8 +31,8 @@ class PostController extends Controller
     {
         $validated = $request->validate([
             'content'    => 'required|string',
-            'category'   => 'nullable|string|max:255', // Changed to nullable
-            'attachment' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx,xlsx',
+            'category'   => 'nullable|string|max:255',
+            'media.*'    => 'nullable|file|mimes:jpg,jpeg,png,gif,mp4,mov,avi,mp3,wav,ogg,pdf,doc,docx,xlsx|max:25600',
             'location'   => 'nullable|string',
             'lat'        => 'nullable|numeric',
             'lng'        => 'nullable|numeric',
@@ -41,13 +41,30 @@ class PostController extends Controller
         $data = $validated;
         $data['user_id'] = Auth::id();
 
-        if ($request->hasFile('attachment')) {
-            // Store the file in the 'public/attachments' folder
-            $path = $request->file('attachment')->store('attachments', 'public');
-            $data['attachment'] = $path;
-        }
-
+        // Create the post
         $post = Post::create($data);
+
+        // Handle multiple media files
+        if ($request->hasFile('media')) {
+            foreach ($request->file('media') as $mediaFile) {
+                // Determine the type of media (image, video, audio, document)
+                $mimeType = $mediaFile->getMimeType();
+                $collection = 'default';
+                
+                if (str_contains($mimeType, 'image')) {
+                    $collection = 'images';
+                } elseif (str_contains($mimeType, 'video')) {
+                    $collection = 'videos';
+                } elseif (str_contains($mimeType, 'audio')) {
+                    $collection = 'audio';
+                } else {
+                    $collection = 'documents';
+                }
+                
+                $post->addMedia($mediaFile)
+                     ->toMediaCollection($collection);
+            }
+        }
 
         return redirect()->back()->with('success', 'Post created successfully!');
     }
