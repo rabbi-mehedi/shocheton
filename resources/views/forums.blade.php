@@ -23,11 +23,17 @@
         <aside id="sidebar" class="w-full md:w-1/4 mb-6 md:mb-0">
             <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
                 <h2 class="text-lg font-semibold mb-2 hidden md:block">Categories</h2>
-                <ul id="categoryList" class="space-y-2">
-                    <li><a href="{{ route('forums.index', ['category' => 'General']) }}" class="text-sm text-red-600 hover:underline">General</a></li>
-                    <li><a href="{{ route('forums.index', ['category' => 'Advice']) }}" class="text-sm text-red-600 hover:underline">Advice</a></li>
-                    <li><a href="{{ route('forums.index', ['category' => 'News']) }}" class="text-sm text-red-600 hover:underline">News</a></li>
-                    <li><a href="{{ route('forums.index', ['category' => 'Support']) }}" class="text-sm text-red-600 hover:underline">Support</a></li>
+                <ul id="sidebarCategoryList" class="space-y-2">
+                    <li><a href="{{ route('forums.index') }}" class="text-sm {{ !request('category') ? 'font-bold text-red-700' : 'text-red-600' }} hover:underline">All Categories</a></li>
+                    @php
+                        $categories = \App\Models\Post::select('category')
+                            ->distinct()
+                            ->whereNotNull('category')
+                            ->pluck('category');
+                    @endphp
+                    @foreach($categories as $category)
+                    <li><a href="{{ route('forums.index', ['category' => $category]) }}" class="text-sm {{ request('category') == $category ? 'font-bold text-red-700' : 'text-red-600' }} hover:underline">{{ $category }}</a></li>
+                    @endforeach
                 </ul>
             </div>
         </aside>
@@ -47,7 +53,20 @@
                     @csrf
                     <textarea name="content" id="postContent" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 resize-none" rows="3" placeholder="Share your thoughts and experiences..."></textarea>
                     
-                    <section class="flex justify-between w-full">
+                    <!-- Category Selection -->
+                    <div class="mt-2">
+                        <label for="category" class="text-sm text-gray-700">Category (optional):</label>
+                        <div class="flex items-center">
+                            <input type="text" name="category" id="categoryInput" list="categoryDropdown" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400" placeholder="Select or create a new category">
+                            <datalist id="categoryDropdown">
+                                @foreach($categories as $category)
+                                    <option value="{{ $category }}">
+                                @endforeach
+                            </datalist>
+                        </div>
+                    </div>
+                    
+                    <section class="flex justify-between w-full mt-2">
                         <div class="flex w-full">
                             <!-- File Attachment -->
                             <div class="mt-4">
@@ -85,13 +104,23 @@
             <div id="posts" class="space-y-6">
                 @foreach ($posts as $post)
                 <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm" id="post-{{ $post->id }}">
-                    <div class="flex items-center mb-3">
+                    <div class="flex items-center mb-2">
                         <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" class="object-cover w-10 h-10 rounded-full mr-3" alt="User">
                         <div>
                             <p class="font-semibold text-gray-800">{{ $post->user->name }}</p>
                             <p class="text-xs text-gray-500">{{ $post->created_at->diffForHumans() }}</p>
                         </div>
                     </div>
+
+                    <!-- Category Tag -->
+                    @if($post->category)
+                    <div class="mb-2">
+                        <span class="inline-block bg-red-100 text-red-700 text-xs font-semibold px-2 py-1 rounded-full">
+                            {{ $post->category }}
+                        </span>
+                    </div>
+                    @endif
+                    
                     <p class="text-gray-800 mb-3">{!! nl2br(e($post->content)) !!}</p>
 
                     <!-- Voting and actions -->
@@ -103,7 +132,7 @@
                             </span>
                             <button class="text-gray-600 hover:text-blue-600" onclick="votePost({{ $post->id }}, -1, this)" aria-label="Downvote post {{ $post->id }}">⬇</button>
                         </div>
-                        <button onclick="confirmReportPost({{ $post->id }})" class="text-gray-500 hover:text-yellow-600" aria-label="Report post {{ $post->id }}">🚩 Report</button>
+                        <button onclick="reportPost({{ $post->id }})" class="text-gray-500 hover:text-yellow-600" aria-label="Report post {{ $post->id }}">🚩 Report</button>
                         @if (auth()->check() && auth()->user()->id == $post->user->id)
                             <button onclick="confirmDeletePost({{ $post->id }})" class="text-gray-500 hover:text-red-600" aria-label="Delete post {{ $post->id }}">🗑️ Delete</button>
                         @endif
@@ -112,11 +141,11 @@
                     <!-- Comments Section -->
                     <div class="comments">
                         <button class="text-blue-600 hover:underline text-sm" onclick="toggleComments({{ $post->id }})">
-                            View Comments ({{ $post->comments->count() }})
+                            View Comments ({{ $post->allComments->count() }})
                         </button>
                         <div id="comments-{{ $post->id }}" class="hidden mt-4">
                             @foreach ($post->comments as $comment)
-                            <div class="ml-4 mb-3 border-l-2 border-gray-300 pl-4">
+                            <div class="ml-4 mb-3 border-l-2 border-gray-300 pl-4" id="comment-{{ $comment->id }}">
                                 <div class="flex items-center mb-1">
                                     <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" class="object-cover w-8 h-8 rounded-full mr-3" alt="User">
                                     <p class="font-medium text-sm text-gray-700">
@@ -125,6 +154,42 @@
                                     </p>
                                 </div>
                                 <p class="text-gray-700 mb-1">{{ $comment->content }}</p>
+                                
+                                <!-- Reply button -->
+                                <div class="flex items-center mt-1 mb-2">
+                                    <button class="text-xs text-gray-500 hover:text-blue-600" 
+                                            onclick="toggleReplyForm({{ $comment->id }})">Reply</button>
+                                </div>
+                                
+                                <!-- Reply form -->
+                                <div id="reply-form-{{ $comment->id }}" class="hidden ml-4 mt-2 mb-2">
+                                    <form action="{{ route('comments.store', $post->id) }}" method="POST" class="reply-form">
+                                        @csrf
+                                        <input type="hidden" name="parent_id" value="{{ $comment->id }}">
+                                        <textarea name="content" class="w-full p-2 border border-gray-300 rounded-lg resize-none text-sm" rows="2" placeholder="Write a reply..."></textarea>
+                                        <div class="flex justify-end mt-1">
+                                            <button type="submit" class="text-xs px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Reply</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                
+                                <!-- Replies -->
+                                @if($comment->replies->count() > 0)
+                                <div class="mt-2">
+                                    @foreach($comment->replies as $reply)
+                                    <div class="ml-5 mt-2 border-l-2 border-gray-200 pl-3" id="reply-{{ $reply->id }}">
+                                        <div class="flex items-center">
+                                            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" class="object-cover w-6 h-6 rounded-full mr-2" alt="User">
+                                            <p class="font-medium text-xs text-gray-700">
+                                                {{ $reply->user->name }}
+                                                <span class="text-xs text-gray-400">· {{ $reply->created_at->diffForHumans() }}</span>
+                                            </p>
+                                        </div>
+                                        <p class="text-sm text-gray-700 ml-8">{{ $reply->content }}</p>
+                                    </div>
+                                    @endforeach
+                                </div>
+                                @endif
                             </div>
                             @endforeach
 
@@ -223,16 +288,40 @@
         commentsDiv.classList.toggle('hidden');
     }
 
-    // Confirmation dialog for reporting a post
-    function confirmReportPost(postId) {
-        if (confirm('Are you sure you want to report this post?')) {
-            reportPost(postId);
+    // Toggle reply form for a comment
+    function toggleReplyForm(commentId) {
+        const replyForm = document.getElementById('reply-form-' + commentId);
+        replyForm.classList.toggle('hidden');
+        
+        // Focus the textarea if visible
+        if (!replyForm.classList.contains('hidden')) {
+            replyForm.querySelector('textarea').focus();
         }
     }
 
-    // Placeholder for report functionality
+    // Function to report a post
     function reportPost(postId) {
-        alert('Post ' + postId + ' reported.');
+        if (confirm('Are you sure you want to report this post?')) {
+            fetch(`/posts/${postId}/report`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Post reported successfully.');
+                } else {
+                    alert('Error reporting post: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while reporting the post.');
+            });
+        }
     }
 
     // Confirmation dialog for deleting a post
@@ -263,5 +352,5 @@
 </script>
 
 <!-- Google Maps API -->
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&callback=initMap"></script>
 @endsection

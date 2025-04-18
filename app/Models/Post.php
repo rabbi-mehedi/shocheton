@@ -13,6 +13,7 @@ class Post extends Model implements HasMedia
     protected $fillable = [
         'user_id',
         'content',
+        'category',
         'attachment',
         'location',
         'lat',
@@ -28,6 +29,11 @@ class Post extends Model implements HasMedia
 
     public function comments()
     {
+        return $this->hasMany(Comment::class)->whereNull('parent_id');
+    }
+
+    public function allComments()
+    {
         return $this->hasMany(Comment::class);
     }
 
@@ -35,6 +41,4 @@ class Post extends Model implements HasMedia
     {
         return $this->morphMany(Vote::class, 'voteable');
     }
-
-    
 }

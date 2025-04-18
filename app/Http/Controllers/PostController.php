@@ -9,27 +9,29 @@ use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
-    public function __invoke()
+    public function __invoke(Request $request)
     {
         // Start building the query with eager loading for efficiency.
-        $query = Post::with(['user', 'votes', 'comments.user'])
+        $query = Post::with(['user', 'votes', 'comments.user', 'comments.replies.user'])
         ->orderBy('created_at', 'desc');
 
         // Optionally filter posts by category if the 'category' query parameter exists.
-        if (isset($request) && $request->has('category')) {
+        if ($request->has('category')) {
             $category = $request->input('category');
             $query->where('category', $category);
         }
 
         // Retrieve posts with pagination (adjust page size as needed)
         $posts = $query->paginate(10);
-        return view('forums',compact('posts'));
+        return view('forums', compact('posts'));
     }
+
     // Store a new post (called when the user clicks “Post”)
     public function store(Request $request)
     {
         $validated = $request->validate([
             'content'    => 'required|string',
+            'category'   => 'nullable|string|max:255', // Changed to nullable
             'attachment' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx,xlsx',
             'location'   => 'nullable|string',
             'lat'        => 'nullable|numeric',
