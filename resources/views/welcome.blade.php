@@ -10,231 +10,235 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body>
+<body class="bg-gray-50">
     @auth
         <livewire:public-navigation></livewire:public-navigation>
     @endauth
-    <div class="w-full bg-white">
-
+    
+    <div class="w-full bg-white shadow-sm">
         <!-- Header Section -->
-        <header class=" py-6">
+        <header class="py-4 border-b border-gray-100">
             <div class="container flex items-center justify-center flex-col mx-auto px-4 text-center">
                 <a href="{{route('home')}}">
-                    <img src="{{asset('wide_logo.png')}}" class="h-[10vh]" alt="Shocheton.org">
+                    <img src="{{asset('wide_logo.png')}}" class="h-[8vh]" alt="Shocheton.org">
                 </a>
-                <h1 class="text-xl mt-6 md:text-2xl font-bold uppercase tracking-wider">
+                <h1 class="text-lg mt-3 md:text-xl font-bold uppercase tracking-wider text-gray-800">
                     Bangladesh Sex Offenders<br>Public Registry
                 </h1>
             </div>
         </header>
     
-        <link rel="icon" type="image/png" href="{{asset('iconmark.png')}}">
-    
         <!-- Main Container -->
-        <main class="container flex flex-col w-ful justify-center items-center mx-auto px-4 py-6">
-    
-            <!-- Report Button -->
-            <div class="text-center mb-6">
-                <a href="{{ route('submit.report.form') }}"
-                   class="inline-block bg-red-600 hover:bg-red-700 text-center text-white font-semibold uppercase px-6 py-3 rounded shadow">
-                    I WANT TO REPORT AN INCIDENT
-                </a>
-            </div>
-            
-            <!-- Community Forums Button -->
-            <div class="text-center mb-6">
-                <a href="{{ route('forums.index') }}"
-                   class="inline-block bg-red-600 hover:bg-red-700 text-center text-white font-semibold uppercase px-6 py-3 rounded shadow">
-                    আলোচনাস্হ | COMMUNITY FORUM
-                </a>
-            </div>
-            
-            @guest
-                <!-- Map Button -->
+        <main class="container mx-auto px-4 py-6">
+            <!-- Priority Section: Search & Report -->
+            <div class="max-w-4xl mx-auto mb-8">
+                <!-- Report Button - Prominent -->
                 <div class="text-center mb-6">
-                    <a 
-                        href="{{ route('map') }}"
-                        class="inline-block bg-red-600 hover:bg-red-700 text-center text-white font-semibold uppercase px-6 py-3 rounded shadow"
-                    >
-                        সচেতন MAP
+                    <a href="{{ route('submit.report.form') }}"
+                       class="inline-block bg-red-600 hover:bg-red-700 text-center text-white font-semibold uppercase px-6 py-4 rounded-lg shadow-md w-full sm:w-auto transition duration-200">
+                        <span class="flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                            I WANT TO REPORT AN INCIDENT
+                        </span>
                     </a>
                 </div>
-            @endguest
-            @auth
-                <!-- Map Button -->
-                <div class="text-center mb-6">
-                    <a 
-                        href="{{ route('map') }}"
-                        class="inline-block bg-red-600 hover:bg-red-700 text-center text-white font-semibold uppercase px-6 py-3 rounded shadow"
-                    >
-                        SEND EMERGENCY GPS ALERT
+                
+                <!-- Global Search -->
+                <div class="mb-8">
+                    <livewire:global-search></livewire:global-search>
+                </div>
+            </div>
+            
+            <!-- Navigation Options in Card-Based Grid -->
+            <div class="max-w-5xl mx-auto">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    <!-- Community Forums Card -->
+                    <a href="{{ route('forums.index') }}" 
+                       class="bg-white hover:bg-gray-50 rounded-lg shadow-sm p-4 border border-gray-100 flex flex-col items-center justify-center transition duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                        </svg>
+                        <span class="text-center font-semibold text-sm uppercase">আলোচনাস্হ<br>Community Forum</span>
+                    </a>
+                    
+                    <!-- Heatmap Card -->
+                    <a href="{{ route('heatmap') }}" 
+                       class="bg-white hover:bg-gray-50 rounded-lg shadow-sm p-4 border border-gray-100 flex flex-col items-center justify-center transition duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                        </svg>
+                        <span class="text-center font-semibold text-sm uppercase">Offense<br>Heatmap</span>
+                    </a>
+                    
+                    <!-- Map Button Card -->
+                    <a href="{{ route('map') }}" 
+                       class="bg-white hover:bg-gray-50 rounded-lg shadow-sm p-4 border border-gray-100 flex flex-col items-center justify-center transition duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span class="text-center font-semibold text-sm uppercase">
+                            @auth
+                                Emergency<br>GPS Alert
+                            @else
+                                সচেতন<br>MAP
+                            @endauth
+                        </span>
+                    </a>
+                    
+                    <!-- How it Works Card -->
+                    <a href="{{ route('explain') }}" 
+                       class="bg-white hover:bg-gray-50 rounded-lg shadow-sm p-4 border border-gray-100 flex flex-col items-center justify-center transition duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span class="text-center font-semibold text-sm uppercase">কিভাবে এটি কাজ করে<br>How it Works</span>
                     </a>
                 </div>
-            @endauth
-            <div class="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4 my-6">
+                
+                <!-- Authentication Section -->
                 @guest
-                <div class="flex flex-col md:flex-row md:space-x-2 space-y-2 md:space-y-0">
-                    <a 
-                        href="{{ route('register') }}" 
-                        class="w-full md:w-auto bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded font-semibold text-center"
-                    >
-                        সাইন আপ | Sign Up
-                    </a>
-                    <a 
-                        href="{{ route('login') }}" 
-                        class="w-full md:w-auto bg-black hover:bg-gray-900 text-white px-4 py-2 rounded font-semibold text-center"
-                    >
-                        প্রবেশ | Login
-                    </a>
+                <div class="flex justify-center mb-8">
+                    <div class="flex space-x-4">
+                        <a href="{{ route('register') }}" 
+                           class="bg-white hover:bg-red-50 border border-red-200 text-red-600 px-5 py-2 rounded-md font-semibold text-center transition duration-200 text-sm">
+                            সাইন আপ | Sign Up
+                        </a>
+                        <a href="{{ route('login') }}" 
+                           class="bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 px-5 py-2 rounded-md font-semibold text-center transition duration-200 text-sm">
+                            প্রবেশ | Login
+                        </a>
+                    </div>
                 </div>
                 @endguest
-
-
-            </div>
-            <!-- "How it Works" link -->
-            <a 
-                href="{{ route('explain') }}"
-                class="font-bold underline text-gray-800"
-            >
-                কিভাবে এটি কাজ করে | How it Works
-            </a>
-            
-    
-            <livewire:global-search></livewire:global-search>
-            <!-- Toggle Button for Disclaimer -->
-            <div 
-            id="disclaimerToggle" 
-            class="flex items-center space-x-2 cursor-pointer text-sm font-semibold text-gray-700 mb-2"
-            >
-            <!-- Arrow Icon (rotates on click) -->
-            <svg 
-            id="disclaimerArrow"
-            class="h-4 w-4 text-gray-600 transition-transform duration-200"
-            fill="none" 
-            stroke="currentColor" 
-            stroke-width="2" 
-            viewBox="0 0 24 24"
-            >
-            <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-            <span>DISCLAIMER & NOTE</span>
-            </div>
-
-            <!-- Disclaimer Container (hidden by default) -->
-            <div 
-            id="disclaimerContainer" 
-            class="hidden bg-gray-50 border border-gray-200 p-4 rounded text-left"
-            >
-            <!-- Language Tabs -->
-            <div class="flex items-center space-x-2 mb-4">
-            <button 
-                id="btnBangla" 
-                class="px-3 py-1 rounded text-sm font-semibold bg-red-600 text-white focus:outline-none"
-            >
-                বাংলা
-            </button>
-            <button 
-                id="btnEnglish" 
-                class="px-3 py-1 rounded text-sm font-semibold bg-gray-600 text-white focus:outline-none"
-            >
-                English
-            </button>
-            </div>
-
-            <!-- Bangla Disclaimer (default visible) -->
-            <div id="disclaimerBangla" class="block text-sm text-gray-700 space-y-2">
-            <ul class="list-disc pl-5">
-                <li>এটি কোনো সরকারি ওয়েবসাইট নয়</li>
-                <li>রিপোর্টার/ভিক্টিমের তথ্য ডিফল্টভাবে সুরক্ষিত থাকে এবং কখনই সর্বসাধারণের জন্য প্রদর্শিত হয় না</li>
-                <li>যদি আপনার জমা দেওয়া রিপোর্ট সার্চে না দেখা যায়, তাহলে তা এখনো মডারেশন টিমের পর্যালোচনায় রয়েছে</li>
-                <li>এই ওয়েবসাইটটি বেটা পর্যায়ে রয়েছে এবং আপনি কারিগরি সমস্যার সম্মুখীন হতে পারেন।
-                <br>কোনো বাগ পেলে আমাদের সোশ্যাল মিডিয়ায় জানাবেন:
-                <div class="flex space-x-6 mt-1">
-                    <a target="_blank" href="https://www.instagram.com/shocheton.live/" class="text-red-500">Instagram</a>
-                    <a target="_blank" href="https://www.facebook.com/profile.php?id=61573974269133" class="text-red-500">Facebook</a>
+                
+                <!-- Disclaimer Section (Minimized) -->
+                <div class="max-w-4xl mx-auto mb-10">
+                    <div id="disclaimerToggle" 
+                         class="flex items-center justify-center space-x-2 cursor-pointer text-sm font-medium text-gray-600 mb-2 py-2 border-b border-gray-100">
+                        <svg id="disclaimerArrow"
+                             class="h-4 w-4 text-gray-400 transition-transform duration-200"
+                             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M19 9l-7 7-7-7" />
+                        </svg>
+                        <span>DISCLAIMER & NOTE</span>
+                    </div>
+                
+                    <!-- Disclaimer Container (hidden by default) -->
+                    <div id="disclaimerContainer" 
+                         class="hidden bg-white border border-gray-100 p-4 rounded-lg shadow-sm text-left">
+                        <!-- Language Tabs -->
+                        <div class="flex items-center space-x-2 mb-4">
+                            <button id="btnBangla" 
+                                class="px-3 py-1 rounded text-sm font-semibold bg-red-600 text-white focus:outline-none">
+                                বাংলা
+                            </button>
+                            <button id="btnEnglish" 
+                                class="px-3 py-1 rounded text-sm font-semibold bg-gray-200 text-gray-700 focus:outline-none">
+                                English
+                            </button>
+                        </div>
+                
+                        <!-- Bangla Disclaimer (default visible) -->
+                        <div id="disclaimerBangla" class="block text-sm text-gray-600 space-y-2">
+                            <ul class="list-disc pl-5">
+                                <li>এটি কোনো সরকারি ওয়েবসাইট নয়</li>
+                                <li>রিপোর্টার/ভিক্টিমের তথ্য ডিফল্টভাবে সুরক্ষিত থাকে এবং কখনই সর্বসাধারণের জন্য প্রদর্শিত হয় না</li>
+                                <li>যদি আপনার জমা দেওয়া রিপোর্ট সার্চে না দেখা যায়, তাহলে তা এখনো মডারেশন টিমের পর্যালোচনায় রয়েছে</li>
+                                <li>এই ওয়েবসাইটটি বেটা পর্যায়ে রয়েছে এবং আপনি কারিগরি সমস্যার সম্মুখীন হতে পারেন।
+                                <br>কোনো বাগ পেলে আমাদের সোশ্যাল মিডিয়ায় জানাবেন:
+                                <div class="flex space-x-6 mt-1">
+                                    <a target="_blank" href="https://www.instagram.com/shocheton.live/" class="text-red-500 hover:underline">Instagram</a>
+                                    <a target="_blank" href="https://www.facebook.com/profile.php?id=61573974269133" class="text-red-500 hover:underline">Facebook</a>
+                                </div>
+                                </li>
+                            </ul>
+                        </div>
+                
+                        <!-- English Disclaimer (hidden by default) -->
+                        <div id="disclaimerEnglish" class="hidden text-sm text-gray-600 space-y-2">
+                            <ul class="list-disc pl-5">
+                                <li>THIS IS NOT A GOVERNMENT WEBSITE</li>
+                                <li>INFORMATION ABOUT REPORTER/VICTIM IS PROTECTED BY DEFAULT AND IS NEVER DISPLAYED PUBLICLY</li>
+                                <li>IF YOUR SUBMITTED REPORT IS NOT VISIBLE IN SEARCH, IT IS STILL UNDER REVIEW BY OUR MODERATION TEAM</li>
+                                <li>THIS WEBSITE IS IN BETA AND YOU MAY EXPERIENCE TECHNICAL DIFFICULTIES.
+                                <br>PLEASE REPORT ANY BUGS TO OUR SOCIALS:
+                                <div class="flex space-x-6 mt-1">
+                                    <a target="_blank" href="https://www.instagram.com/shocheton.live/" class="text-red-500 hover:underline">Instagram</a>
+                                    <a target="_blank" href="https://www.facebook.com/profile.php?id=61573974269133" class="text-red-500 hover:underline">Facebook</a>
+                                </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-                </li>
-            </ul>
             </div>
 
-            <!-- English Disclaimer (hidden by default) -->
-            <div id="disclaimerEnglish" class="hidden text-sm text-gray-700 space-y-2">
-            <ul class="list-disc pl-5">
-                <li>THIS IS NOT A GOVERNMENT WEBSITE</li>
-                <li>INFORMATION ABOUT REPORTER/VICTIM IS PROTECTED BY DEFAULT AND IS NEVER DISPLAYED PUBLICLY</li>
-                <li>IF YOUR SUBMITTED REPORT IS NOT VISIBLE IN SEARCH, IT IS STILL UNDER REVIEW BY OUR MODERATION TEAM</li>
-                <li>THIS WEBSITE IS IN BETA AND YOU MAY EXPERIENCE TECHNICAL DIFFICULTIES.
-                <br>PLEASE REPORT ANY BUGS TO OUR SOCIALS:
-                <div class="flex space-x-6 mt-1">
-                    <a target="_blank" href="https://www.instagram.com/shocheton.live/" class="text-red-500">Instagram</a>
-                    <a target="_blank" href="https://www.facebook.com/profile.php?id=61573974269133" class="text-red-500">Facebook</a>
+            <!-- Offenders Grid -->
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b border-gray-200">Recent Offenders</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    @foreach ($offenders as $offender)
+                        <livewire:offender :offender="$offender"></livewire:offender>
+                    @endforeach
                 </div>
-                </li>
-            </ul>
             </div>
-            </div>
+        </main>
+    </div>
 
-            <script>
-            // Grab elements
-            const disclaimerToggle = document.getElementById('disclaimerToggle');
-            const disclaimerContainer = document.getElementById('disclaimerContainer');
-            const disclaimerArrow = document.getElementById('disclaimerArrow');
-            const btnBangla = document.getElementById('btnBangla');
-            const btnEnglish = document.getElementById('btnEnglish');
-            const disclaimerBangla = document.getElementById('disclaimerBangla');
-            const disclaimerEnglish = document.getElementById('disclaimerEnglish');
+    <script>
+        // Grab elements
+        const disclaimerToggle = document.getElementById('disclaimerToggle');
+        const disclaimerContainer = document.getElementById('disclaimerContainer');
+        const disclaimerArrow = document.getElementById('disclaimerArrow');
+        const btnBangla = document.getElementById('btnBangla');
+        const btnEnglish = document.getElementById('btnEnglish');
+        const disclaimerBangla = document.getElementById('disclaimerBangla');
+        const disclaimerEnglish = document.getElementById('disclaimerEnglish');
 
-            let disclaimersOpen = false; // hidden by default
-            let currentLang = 'bangla'; // default language
+        let disclaimersOpen = false; // hidden by default
+        let currentLang = 'bangla'; // default language
 
-            // Toggle the entire disclaimer container
-            disclaimerToggle.addEventListener('click', function() {
+        // Toggle the entire disclaimer container
+        disclaimerToggle.addEventListener('click', function() {
             disclaimersOpen = !disclaimersOpen;
             if (disclaimersOpen) {
                 disclaimerContainer.classList.remove('hidden');
-                disclaimerArrow.classList.add('rotate-90'); // rotate arrow
+                disclaimerArrow.classList.add('rotate-180'); // rotate arrow down
             } else {
                 disclaimerContainer.classList.add('hidden');
-                disclaimerArrow.classList.remove('rotate-90');
+                disclaimerArrow.classList.remove('rotate-180');
             }
-            });
+        });
 
-            // Switch to Bangla
-            btnBangla.addEventListener('click', function() {
+        // Switch to Bangla
+        btnBangla.addEventListener('click', function() {
             currentLang = 'bangla';
             disclaimerBangla.classList.remove('hidden');
             disclaimerBangla.classList.add('block');
             disclaimerEnglish.classList.add('hidden');
             // Update button colors
-            btnBangla.classList.remove('bg-gray-600');
-            btnBangla.classList.add('bg-red-600');
-            btnEnglish.classList.remove('bg-red-600');
-            btnEnglish.classList.add('bg-gray-600');
-            });
+            btnBangla.classList.remove('bg-gray-200', 'text-gray-700');
+            btnBangla.classList.add('bg-red-600', 'text-white');
+            btnEnglish.classList.remove('bg-red-600', 'text-white');
+            btnEnglish.classList.add('bg-gray-200', 'text-gray-700');
+        });
 
-            // Switch to English
-            btnEnglish.addEventListener('click', function() {
+        // Switch to English
+        btnEnglish.addEventListener('click', function() {
             currentLang = 'english';
             disclaimerEnglish.classList.remove('hidden');
             disclaimerEnglish.classList.add('block');
             disclaimerBangla.classList.add('hidden');
             // Update button colors
-            btnEnglish.classList.remove('bg-gray-600');
-            btnEnglish.classList.add('bg-red-600');
-            btnBangla.classList.remove('bg-red-600');
-            btnBangla.classList.add('bg-gray-600');
-            });
-            </script>
-
-            <!-- Offenders Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @foreach ($offenders as $offender)
-                    <livewire:offender :offender="$offender"></livewire:offender>
-                @endforeach
-    
-            </div> <!-- End Offenders Grid -->
-    
-        </main>
-    </div>
+            btnEnglish.classList.remove('bg-gray-200', 'text-gray-700');
+            btnEnglish.classList.add('bg-red-600', 'text-white');
+            btnBangla.classList.remove('bg-red-600', 'text-white');
+            btnBangla.classList.add('bg-gray-200', 'text-gray-700');
+        });
+    </script>
+    @livewireScripts
 </body>
 </html>

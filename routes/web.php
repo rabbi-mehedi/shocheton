@@ -21,7 +21,7 @@ Route::get('/map', EmergencyAlertController::class)
     
 // heatmap (testing)
 use App\Http\Controllers\HeatmapController;
-Route::get('/heatmap', [HeatmapController::class, 'index']);
+Route::get('/heatmap', [HeatmapController::class, 'index'])->name('heatmap');
 
 Route::get('/emergency', EmergencyAlertController::class)
     ->name('emergency.index');
