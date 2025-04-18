@@ -560,15 +560,33 @@
         })
         .then(data => {
             if (data.success) {
-                // Update the displayed vote count using the difference between upvotes and downvotes
-                const upvoteCountElem = btn.parentElement.querySelector('.upvote-count');
-                const downvoteCountElem = btn.parentElement.parentElement.querySelector('.downvote-count');
-                upvoteCountElem.textContent = data.upvotes;
-                downvoteCountElem.textContent = data.downvotes;
+                // Update the displayed vote count using the data from the server response
+                const upvoteCountElem = btn.closest('.flex').querySelector('.upvote-count');
+                const downvoteCountElem = btn.closest('.flex').parentElement.querySelector('.downvote-count');
+                
+                // If we're in the upvote section, find the downvote in the parent element
+                if (btn.parentElement.querySelector('.upvote-count')) {
+                    upvoteCountElem.textContent = data.upvotes;
+                    // Find the sibling downvote container
+                    const downvoteContainer = btn.parentElement.nextElementSibling;
+                    if (downvoteContainer && downvoteContainer.querySelector('.downvote-count')) {
+                        downvoteContainer.querySelector('.downvote-count').textContent = data.downvotes;
+                    }
+                } 
+                // If we're in the downvote section, find the upvote in the parent element
+                else if (btn.parentElement.querySelector('.downvote-count')) {
+                    downvoteCountElem.textContent = data.downvotes;
+                    // Find the sibling upvote container
+                    const upvoteContainer = btn.parentElement.previousElementSibling;
+                    if (upvoteContainer && upvoteContainer.querySelector('.upvote-count')) {
+                        upvoteContainer.querySelector('.upvote-count').textContent = data.upvotes;
+                    }
+                }
                 
                 // Provide visual feedback for the user's vote
-                const upvoteBtn = btn.parentElement.querySelector('button[aria-label^="Upvote"]');
-                const downvoteBtn = btn.parentElement.parentElement.querySelector('button[aria-label^="Downvote"]');
+                const parentElement = btn.closest('.flex').parentElement;
+                const upvoteBtn = parentElement.querySelector('button[aria-label^="Upvote"]');
+                const downvoteBtn = parentElement.querySelector('button[aria-label^="Downvote"]');
                 
                 // Reset both buttons to default style
                 upvoteBtn.className = 'text-gray-600 hover:text-red-600';
