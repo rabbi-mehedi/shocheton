@@ -102,114 +102,129 @@
 
             <!-- Threads Section -->
             <div id="posts" class="space-y-6">
-                @foreach ($posts as $post)
-                <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm" id="post-{{ $post->id }}">
-                    <div class="flex items-center mb-2">
-                        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" class="object-cover w-10 h-10 rounded-full mr-3" alt="User">
-                        <div>
-                            <p class="font-semibold text-gray-800">{{ $post->user->name }}</p>
-                            <p class="text-xs text-gray-500">{{ $post->created_at->diffForHumans() }}</p>
+                @if($posts->isEmpty())
+                    <div class="bg-white border border-gray-200 rounded-lg p-8 shadow-sm text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">No discussions yet</h3>
+                        <p class="text-gray-600 mb-4">Be the first to start a discussion in this community!</p>
+                        <button id="startFirstPost" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Start a New Thread</button>
+                    </div>
+                @else
+                    @foreach ($posts as $post)
+                    <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm" id="post-{{ $post->id }}">
+                        <div class="flex items-center mb-2">
+                            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" class="object-cover w-10 h-10 rounded-full mr-3" alt="User">
+                            <div>
+                                <p class="font-semibold text-gray-800">{{ $post->user->name }}</p>
+                                <p class="text-xs text-gray-500">{{ $post->created_at->diffForHumans() }}</p>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Category Tag -->
-                    @if($post->category)
-                    <div class="mb-2">
-                        <span class="inline-block bg-red-100 text-red-700 text-xs font-semibold px-2 py-1 rounded-full">
-                            {{ $post->category }}
-                        </span>
-                    </div>
-                    @endif
-                    
-                    <p class="text-gray-800 mb-3">{!! nl2br(e($post->content)) !!}</p>
-
-                    <!-- Voting and actions -->
-                    <div class="flex items-center gap-4 text-sm mb-3">
-                        <div class="flex items-center space-x-1">
-                            <button class="text-gray-600 hover:text-red-600" onclick="votePost({{ $post->id }}, 1, this)" aria-label="Upvote post {{ $post->id }}">⬆</button>
-                            <span class="vote-count">
-                                {{ $post->votes->where('vote', 1)->count() - $post->votes->where('vote', -1)->count() }}
+                        <!-- Category Tag -->
+                        @if($post->category)
+                        <div class="mb-2">
+                            <span class="inline-block bg-red-100 text-red-700 text-xs font-semibold px-2 py-1 rounded-full">
+                                {{ $post->category }}
                             </span>
-                            <button class="text-gray-600 hover:text-blue-600" onclick="votePost({{ $post->id }}, -1, this)" aria-label="Downvote post {{ $post->id }}">⬇</button>
                         </div>
-                        <button onclick="reportPost({{ $post->id }})" class="text-gray-500 hover:text-yellow-600" aria-label="Report post {{ $post->id }}">🚩 Report</button>
-                        @if (auth()->check() && auth()->user()->id == $post->user->id)
-                            <button onclick="confirmDeletePost({{ $post->id }})" class="text-gray-500 hover:text-red-600" aria-label="Delete post {{ $post->id }}">🗑️ Delete</button>
                         @endif
-                    </div>
+                        
+                        <p class="text-gray-800 mb-3">{!! nl2br(e($post->content)) !!}</p>
 
-                    <!-- Comments Section -->
-                    <div class="comments">
-                        <button class="text-blue-600 hover:underline text-sm" onclick="toggleComments({{ $post->id }})">
-                            View Comments ({{ $post->allComments->count() }})
-                        </button>
-                        <div id="comments-{{ $post->id }}" class="hidden mt-4">
-                            @foreach ($post->comments as $comment)
-                            <div class="ml-4 mb-3 border-l-2 border-gray-300 pl-4" id="comment-{{ $comment->id }}">
-                                <div class="flex items-center mb-1">
-                                    <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" class="object-cover w-8 h-8 rounded-full mr-3" alt="User">
-                                    <p class="font-medium text-sm text-gray-700">
-                                        {{ $comment->user->name }} 
-                                        <span class="text-xs text-gray-400">· {{ $comment->created_at->diffForHumans() }}</span>
-                                    </p>
-                                </div>
-                                <p class="text-gray-700 mb-1">{{ $comment->content }}</p>
-                                
-                                <!-- Reply button -->
-                                <div class="flex items-center mt-1 mb-2">
-                                    <button class="text-xs text-gray-500 hover:text-blue-600" 
-                                            onclick="toggleReplyForm({{ $comment->id }})">Reply</button>
-                                </div>
-                                
-                                <!-- Reply form -->
-                                <div id="reply-form-{{ $comment->id }}" class="hidden ml-4 mt-2 mb-2">
-                                    <form action="{{ route('comments.store', $post->id) }}" method="POST" class="reply-form">
-                                        @csrf
-                                        <input type="hidden" name="parent_id" value="{{ $comment->id }}">
-                                        <textarea name="content" class="w-full p-2 border border-gray-300 rounded-lg resize-none text-sm" rows="2" placeholder="Write a reply..."></textarea>
-                                        <div class="flex justify-end mt-1">
-                                            <button type="submit" class="text-xs px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Reply</button>
-                                        </div>
-                                    </form>
-                                </div>
-                                
-                                <!-- Replies -->
-                                @if($comment->replies->count() > 0)
-                                <div class="mt-2">
-                                    @foreach($comment->replies as $reply)
-                                    <div class="ml-5 mt-2 border-l-2 border-gray-200 pl-3" id="reply-{{ $reply->id }}">
-                                        <div class="flex items-center">
-                                            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" class="object-cover w-6 h-6 rounded-full mr-2" alt="User">
-                                            <p class="font-medium text-xs text-gray-700">
-                                                {{ $reply->user->name }}
-                                                <span class="text-xs text-gray-400">· {{ $reply->created_at->diffForHumans() }}</span>
+                        <!-- Voting and actions -->
+                        <div class="flex items-center gap-4 text-sm mb-3">
+                            <div class="flex items-center space-x-1">
+                                <button class="text-gray-600 hover:text-red-600" onclick="votePost({{ $post->id }}, 1, this)" aria-label="Upvote post {{ $post->id }}">⬆</button>
+                                <span class="vote-count">
+                                    {{ $post->votes->where('vote', 1)->count() - $post->votes->where('vote', -1)->count() }}
+                                </span>
+                                <button class="text-gray-600 hover:text-blue-600" onclick="votePost({{ $post->id }}, -1, this)" aria-label="Downvote post {{ $post->id }}">⬇</button>
+                            </div>
+                            <button onclick="reportPost({{ $post->id }})" class="text-gray-500 hover:text-yellow-600" aria-label="Report post {{ $post->id }}">🚩 Report</button>
+                            @if (auth()->check() && auth()->user()->id == $post->user->id)
+                                <button onclick="confirmDeletePost({{ $post->id }})" class="text-gray-500 hover:text-red-600" aria-label="Delete post {{ $post->id }}">🗑️ Delete</button>
+                            @endif
+                        </div>
+
+                        <!-- Comments Section -->
+                        <div class="comments">
+                            <button class="text-blue-600 hover:underline text-sm" onclick="toggleComments({{ $post->id }})">
+                                View Comments ({{ $post->allComments->count() }})
+                            </button>
+                            <div id="comments-{{ $post->id }}" class="hidden mt-4">
+                                @if($post->comments->isEmpty())
+                                    <p class="ml-4 text-sm text-gray-500 italic">No comments yet. Be the first to comment!</p>
+                                @else
+                                    @foreach ($post->comments as $comment)
+                                    <div class="ml-4 mb-3 border-l-2 border-gray-300 pl-4" id="comment-{{ $comment->id }}">
+                                        <div class="flex items-center mb-1">
+                                            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" class="object-cover w-8 h-8 rounded-full mr-3" alt="User">
+                                            <p class="font-medium text-sm text-gray-700">
+                                                {{ $comment->user->name }} 
+                                                <span class="text-xs text-gray-400">· {{ $comment->created_at->diffForHumans() }}</span>
                                             </p>
                                         </div>
-                                        <p class="text-sm text-gray-700 ml-8">{{ $reply->content }}</p>
+                                        <p class="text-gray-700 mb-1">{{ $comment->content }}</p>
+                                        
+                                        <!-- Reply button -->
+                                        <div class="flex items-center mt-1 mb-2">
+                                            <button class="text-xs text-gray-500 hover:text-blue-600" 
+                                                    onclick="toggleReplyForm({{ $comment->id }})">Reply</button>
+                                        </div>
+                                        
+                                        <!-- Reply form -->
+                                        <div id="reply-form-{{ $comment->id }}" class="hidden ml-4 mt-2 mb-2">
+                                            <form action="{{ route('comments.store', $post->id) }}" method="POST" class="reply-form">
+                                                @csrf
+                                                <input type="hidden" name="parent_id" value="{{ $comment->id }}">
+                                                <textarea name="content" class="w-full p-2 border border-gray-300 rounded-lg resize-none text-sm" rows="2" placeholder="Write a reply..."></textarea>
+                                                <div class="flex justify-end mt-1">
+                                                    <button type="submit" class="text-xs px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Reply</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        
+                                        <!-- Replies -->
+                                        @if($comment->replies->count() > 0)
+                                        <div class="mt-2">
+                                            @foreach($comment->replies as $reply)
+                                            <div class="ml-5 mt-2 border-l-2 border-gray-200 pl-3" id="reply-{{ $reply->id }}">
+                                                <div class="flex items-center">
+                                                    <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" class="object-cover w-6 h-6 rounded-full mr-2" alt="User">
+                                                    <p class="font-medium text-xs text-gray-700">
+                                                        {{ $reply->user->name }}
+                                                        <span class="text-xs text-gray-400">· {{ $reply->created_at->diffForHumans() }}</span>
+                                                    </p>
+                                                </div>
+                                                <p class="text-sm text-gray-700 ml-8">{{ $reply->content }}</p>
+                                            </div>
+                                            @endforeach
+                                        </div>
+                                        @endif
                                     </div>
                                     @endforeach
-                                </div>
                                 @endif
-                            </div>
-                            @endforeach
 
-                            <!-- New Comment Form -->
-                            <form action="{{ route('comments.store', $post->id) }}" method="POST" class="ml-4 mt-4">
-                                @csrf
-                                <textarea name="content" class="w-full p-2 border border-gray-300 rounded-lg resize-none text-sm" rows="2" placeholder="Write a comment..."></textarea>
-                                <div class="flex justify-end mt-1">
-                                    <button type="submit" class="text-xs px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Comment</button>
-                                </div>
-                            </form>
+                                <!-- New Comment Form -->
+                                <form action="{{ route('comments.store', $post->id) }}" method="POST" class="ml-4 mt-4">
+                                    @csrf
+                                    <textarea name="content" class="w-full p-2 border border-gray-300 rounded-lg resize-none text-sm" rows="2" placeholder="Write a comment..."></textarea>
+                                    <div class="flex justify-end mt-1">
+                                        <button type="submit" class="text-xs px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">Comment</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-                @endforeach
+                    @endforeach
 
-                <!-- Pagination -->
-                <div class="mt-6">
-                    {{ $posts->links() }}
-                </div>
+                    <!-- Pagination -->
+                    <div class="mt-6">
+                        {{ $posts->links() }}
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -228,6 +243,13 @@
             form.scrollIntoView({ behavior: 'smooth' });
         }
     });
+
+    // Handle empty state "Start a New Thread" button
+    if (document.getElementById('startFirstPost')) {
+        document.getElementById('startFirstPost').addEventListener('click', function() {
+            document.getElementById('togglePostForm').click();
+        });
+    }
 
     // Initialize Google Maps API for location selection
     let geocoder;

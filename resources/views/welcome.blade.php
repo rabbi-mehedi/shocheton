@@ -40,6 +40,15 @@
                     I WANT TO REPORT AN INCIDENT
                 </a>
             </div>
+            
+            <!-- Community Forums Button -->
+            <div class="text-center mb-6">
+                <a href="{{ route('forums.index') }}"
+                   class="inline-block bg-red-600 hover:bg-red-700 text-center text-white font-semibold uppercase px-6 py-3 rounded shadow">
+                    আলোচনাস্হ | COMMUNITY FORUM
+                </a>
+            </div>
+            
             @guest
                 <!-- Map Button -->
                 <div class="text-center mb-6">
