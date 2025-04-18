@@ -80,13 +80,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
     Route::delete('/posts/{id}', [PostController::class, 'destroy']);
     // The vote endpoint expects a POST parameter 'vote' (1 for upvote, -1 for downvote)
-    Route::post('/posts/{post}/vote', [VoteController::class, 'vote'])->name('posts.vote');
+    Route::post('/posts/{post}/vote', [VoteController::class, 'votePost'])->name('posts.vote');
 
     // Create a new comment or reply on a post
     Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
 
     // Vote on a comment
-    Route::post('/comments/{comment}/vote', [CommentController::class, 'vote'])->name('comments.vote');
+    Route::post('/comments/{comment}/vote', [VoteController::class, 'voteComment'])->name('comments.vote');
 
     //Emergency Contact Routes
     Route::get('/emergency-contacts', EmergencyContactController::class)->name('emergency.contacts');

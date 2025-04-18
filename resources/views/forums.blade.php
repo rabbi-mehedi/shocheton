@@ -259,10 +259,15 @@
                         <div class="flex items-center gap-4 text-sm mb-3">
                             <div class="flex items-center space-x-1">
                                 <button class="text-gray-600 hover:text-red-600" onclick="votePost({{ $post->id }}, 1, this)" aria-label="Upvote post {{ $post->id }}">⬆</button>
-                                <span class="vote-count">
-                                    {{ $post->votes->where('vote', 1)->count() - $post->votes->where('vote', -1)->count() }}
+                                <span class="upvote-count text-green-600 font-semibold">
+                                    {{ $post->votes->where('vote', 1)->count() }}
                                 </span>
+                            </div>
+                            <div class="flex items-center space-x-1">
                                 <button class="text-gray-600 hover:text-blue-600" onclick="votePost({{ $post->id }}, -1, this)" aria-label="Downvote post {{ $post->id }}">⬇</button>
+                                <span class="downvote-count text-red-600 font-semibold">
+                                    {{ $post->votes->where('vote', -1)->count() }}
+                                </span>
                             </div>
                             <button onclick="reportPost({{ $post->id }})" class="text-gray-500 hover:text-yellow-600" aria-label="Report post {{ $post->id }}">🚩 Report</button>
                             @if (auth()->check() && auth()->user()->id == $post->user->id)
@@ -290,10 +295,21 @@
                                         </div>
                                         <p class="text-gray-700 mb-1">{{ $comment->content }}</p>
                                         
-                                        <!-- Reply button -->
-                                        <div class="flex items-center mt-1 mb-2">
-                                            <button class="text-xs text-gray-500 hover:text-blue-600" 
-                                                    onclick="toggleReplyForm({{ $comment->id }})">Reply</button>
+                                        <!-- Comment voting and actions -->
+                                        <div class="flex items-center gap-4 text-xs my-1">
+                                            <div class="flex items-center space-x-1">
+                                                <button class="text-gray-600 hover:text-red-600" onclick="voteComment({{ $comment->id }}, 1, this)" aria-label="Upvote comment {{ $comment->id }}">⬆</button>
+                                                <span class="upvote-count text-green-600 font-semibold">
+                                                    {{ $comment->votes->where('vote', 1)->count() ?? 0 }}
+                                                </span>
+                                            </div>
+                                            <div class="flex items-center space-x-1">
+                                                <button class="text-gray-600 hover:text-blue-600" onclick="voteComment({{ $comment->id }}, -1, this)" aria-label="Downvote comment {{ $comment->id }}">⬇</button>
+                                                <span class="downvote-count text-red-600 font-semibold">
+                                                    {{ $comment->votes->where('vote', -1)->count() ?? 0 }}
+                                                </span>
+                                            </div>
+                                            <button class="text-xs text-gray-500 hover:text-blue-600" onclick="toggleReplyForm({{ $comment->id }})">Reply</button>
                                         </div>
                                         
                                         <!-- Reply form -->
@@ -320,7 +336,23 @@
                                                         <span class="text-xs text-gray-400">· {{ $reply->created_at->diffForHumans() }}</span>
                                                     </p>
                                                 </div>
-                                                <p class="text-sm text-gray-700 ml-8">{{ $reply->content }}</p>
+                                                <p class="text-sm text-gray-700 ml-8 mb-1">{{ $reply->content }}</p>
+                                                
+                                                <!-- Reply voting -->
+                                                <div class="flex items-center gap-3 text-xs ml-8 mt-1">
+                                                    <div class="flex items-center space-x-1">
+                                                        <button class="text-gray-600 hover:text-red-600" onclick="voteComment({{ $reply->id }}, 1, this)" aria-label="Upvote reply {{ $reply->id }}">⬆</button>
+                                                        <span class="upvote-count text-green-600 font-semibold">
+                                                            {{ $reply->votes->where('vote', 1)->count() ?? 0 }}
+                                                        </span>
+                                                    </div>
+                                                    <div class="flex items-center space-x-1">
+                                                        <button class="text-gray-600 hover:text-blue-600" onclick="voteComment({{ $reply->id }}, -1, this)" aria-label="Downvote reply {{ $reply->id }}">⬇</button>
+                                                        <span class="downvote-count text-red-600 font-semibold">
+                                                            {{ $reply->votes->where('vote', -1)->count() ?? 0 }}
+                                                        </span>
+                                                    </div>
+                                                </div>
                                             </div>
                                             @endforeach
                                         </div>
@@ -529,12 +561,68 @@
         .then(data => {
             if (data.success) {
                 // Update the displayed vote count using the difference between upvotes and downvotes
-                const voteCountElem = btn.parentElement.querySelector('.vote-count');
-                voteCountElem.textContent = data.upvotes - data.downvotes;
+                const upvoteCountElem = btn.parentElement.querySelector('.upvote-count');
+                const downvoteCountElem = btn.parentElement.parentElement.querySelector('.downvote-count');
+                upvoteCountElem.textContent = data.upvotes;
+                downvoteCountElem.textContent = data.downvotes;
                 
                 // Provide visual feedback for the user's vote
                 const upvoteBtn = btn.parentElement.querySelector('button[aria-label^="Upvote"]');
-                const downvoteBtn = btn.parentElement.querySelector('button[aria-label^="Downvote"]');
+                const downvoteBtn = btn.parentElement.parentElement.querySelector('button[aria-label^="Downvote"]');
+                
+                // Reset both buttons to default style
+                upvoteBtn.className = 'text-gray-600 hover:text-red-600';
+                downvoteBtn.className = 'text-gray-600 hover:text-blue-600';
+                
+                // Highlight the selected vote button if it wasn't toggled off
+                if (data.upvotes > 0 || data.downvotes > 0) {
+                    if (voteValue === 1 && data.upvotes > data.downvotes) {
+                        upvoteBtn.className = 'text-red-600 hover:text-red-700';
+                    } else if (voteValue === -1 && data.downvotes > data.upvotes) {
+                        downvoteBtn.className = 'text-blue-600 hover:text-blue-700';
+                    }
+                }
+            } else if (data.message) {
+                // Show error message if any
+                console.error('Vote error:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    // Vote on a comment (AJAX call)
+    function voteComment(commentId, voteValue, btn) {
+        fetch(`/comments/${commentId}/vote`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({ vote: voteValue })
+        })
+        .then(response => {
+            if (response.status === 401) {
+                // User is not authenticated - ask to log in
+                if (confirm('You need to be logged in to vote. Would you like to log in now?')) {
+                    window.location.href = "{{ route('login') }}?redirect={{ urlencode(request()->fullUrl()) }}";
+                }
+                return { success: false };
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                // Update the displayed vote count using the difference between upvotes and downvotes
+                const upvoteCountElem = btn.parentElement.querySelector('.upvote-count');
+                const downvoteCountElem = btn.parentElement.parentElement.querySelector('.downvote-count');
+                upvoteCountElem.textContent = data.upvotes;
+                downvoteCountElem.textContent = data.downvotes;
+                
+                // Provide visual feedback for the user's vote
+                const upvoteBtn = btn.parentElement.querySelector('button[aria-label^="Upvote"]');
+                const downvoteBtn = btn.parentElement.parentElement.querySelector('button[aria-label^="Downvote"]');
                 
                 // Reset both buttons to default style
                 upvoteBtn.className = 'text-gray-600 hover:text-red-600';
