@@ -8,6 +8,7 @@ use App\Http\Controllers\EmergencyContactController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\VoteController;
+use App\Http\Controllers\ExtortionReportController;
 
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\EmergencyAlertController;
@@ -44,6 +45,11 @@ Route::get('/how-it-works', [PrimaryController::class, 'explain'])->name('explai
 Route::get('/registration/verify-email/{user:id}', [PrimaryController::class, 'sentToMail'])->name('verification.to.mail');
 Route::get('/submit-report', [PrimaryController::class,'showForm'])->name('submit.report.form');
 Route::post('/submit-report', [PrimaryController::class,'submitForm'])->name('submit.report');
+
+// Extortion reporting routes
+Route::get('/report-extortion', [ExtortionReportController::class, 'showForm'])->name('extortion.report.form');
+Route::post('/report-extortion', [ExtortionReportController::class, 'submitForm'])->name('extortion.report.submit');
+
 Route::get('/search', [SearchController::class, 'results'])->name('search.results');
 
 Route::group([
@@ -62,6 +68,12 @@ Route::group([
     Route::get('/reports/{report:id}', [ReportController::class,'view'])->name('admin.report.view'); 
     Route::get('/reports/{report:id}/edit', [ReportController::class, 'edit'])->name('admin.report.edit'); 
     Route::put('/reports/{report:id}/update', [ReportController::class, 'update'])->name('admin.report.update'); 
+    
+    // Extortion report admin routes
+    Route::get('/extortion', [ExtortionReportController::class, 'index'])->name('admin.extortion');
+    Route::get('/extortion/{report:id}', [ExtortionReportController::class, 'view'])->name('admin.extortion.view');
+    Route::get('/extortion/{report:id}/edit', [ExtortionReportController::class, 'edit'])->name('admin.extortion.edit');
+    Route::put('/extortion/{report:id}/update', [ExtortionReportController::class, 'update'])->name('admin.extortion.update');
     // Add more admin routes here
 });
 

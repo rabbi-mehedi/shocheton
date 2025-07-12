@@ -17,6 +17,8 @@
                 <div class="hidden sm:ml-6 sm:flex sm:items-center space-x-8">
                     <!-- Example nav links -->
                     <a href="{{ route('home') }}" class="text-gray-900 hover:text-gray-600">Home</a>
+                    <a href="{{ route('submit.report.form') }}" class="text-gray-900 hover:text-gray-600">Report Offense</a>
+                    <a href="{{ route('extortion.report.form') }}" class="text-gray-900 hover:text-gray-600">Report Extortion</a>
                     @auth
                         <!-- Desktop: Profile/Logout Dropdown -->
                         <div class="relative" x-data="{ openUser: false }">
@@ -107,6 +109,12 @@
             <div class="pt-2 pb-3 space-y-1">
                 <a href="{{ route('home') }}" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-700 hover:bg-gray-100">
                     Home
+                </a>
+                <a href="{{ route('submit.report.form') }}" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-700 hover:bg-gray-100">
+                    Report Offense
+                </a>
+                <a href="{{ route('extortion.report.form') }}" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-700 hover:bg-gray-100">
+                    Report Extortion
                 </a>
 
                 @auth

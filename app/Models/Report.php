@@ -7,6 +7,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Models\User;
 use App\Models\Offender;
+use App\Models\Extortionist;
 
 
 class Report extends Model implements HasMedia
@@ -16,6 +17,7 @@ class Report extends Model implements HasMedia
     protected $fillable = [
         'user_id',
         'offender_id',
+        'extortionist_id',
         'offender_relation_to_victim',
         'police_status', 
         'police_station',
@@ -25,6 +27,7 @@ class Report extends Model implements HasMedia
         'contact_permission',
         'additional_details', 
         'verified',
+        'report_type', // Add field to distinguish between offense types
     ];
 
     public function verified()
@@ -42,4 +45,8 @@ class Report extends Model implements HasMedia
         return $this->hasOne(Offender::class);
     }
     
+    public function extortionist()
+    {
+        return $this->hasOne(Extortionist::class);
+    }
 }
