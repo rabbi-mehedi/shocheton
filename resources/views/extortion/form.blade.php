@@ -50,37 +50,37 @@
             <!-- STEP 1: User Info -->
             <div id="step1" class="bg-white p-6 rounded-lg shadow-inner">
                 <h2 class="text-xl font-bold text-gray-900 mb-4">
-                    Step 1: Your Information
+                    ধাপ ১: আপনার তথ্য / Step 1: Your Information
                 </h2>
 
                 <!-- Full Name -->
                 <label class="block mt-4 text-sm font-semibold text-gray-700">
-                    Your Name:
+                    আপনার নাম / Your Name:
                 </label>
                 <input 
                     type="text" 
                     name="user_name" 
                     class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400" 
-                    placeholder="Enter your full name" 
+                    placeholder="নাম লিখুন / Enter your full name" 
                     required
                 >
 
                 <!-- Phone -->
                 <label class="block mt-4 text-sm font-semibold text-gray-700">
-                    Your Phone Number:
+                    আপনার ফোন নম্বর / Your Phone Number:
                 </label>
                 <input 
                     type="text" 
                     id="phone" 
                     name="user_phone" 
                     class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400" 
-                    placeholder="e.g. 01XXXXXXXXX" 
+                    placeholder="০১XXXXXXXXX / e.g. 01XXXXXXXXX" 
                     required
                 >
 
                 <!-- Email -->
                 <label class="block mt-4 text-sm font-semibold text-gray-700">
-                    Your Email Address:
+                    আপনার ইমেইল / Your Email Address:
                 </label>
                 <input 
                     type="email" 
@@ -101,7 +101,7 @@
                             class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
                         >
                         <label for="is_anonymous" class="ml-2 block text-sm text-gray-700">
-                            I want to report anonymously (your identity will be kept confidential)
+                            আমাকে গোপনীয়ভাবে প্রতিবেদন করতে দিন / I want to report anonymously (your identity will be kept confidential)
                         </label>
                     </div>
                 </div>
@@ -109,7 +109,7 @@
                 <!-- Contact Permission -->
                 <div class="mt-4">
                     <p class="text-sm font-semibold text-gray-700">
-                        May we contact you for further details or to offer support?
+                        আপনার সাথে কি আরো তথ্যের জন্য যোগাযোগ করতে পারি? / May we contact you for further details or to offer support?
                     </p>
                     <div class="flex space-x-4 mt-2">
                         <label class="inline-flex items-center">
@@ -139,7 +139,7 @@
                         onclick="nextStep(1)" 
                         class="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-gray-800 transition"
                     >
-                        Next
+                        পরবর্তী (NEXT)
                     </button>
                 </div>
             </div>
@@ -147,12 +147,12 @@
             <!-- STEP 2: Extortionist Information -->
             <div id="step2" class="bg-white p-6 rounded-lg shadow-inner hidden">
                 <h2 class="text-xl font-bold text-gray-900 mb-4">
-                    Step 2: Extortionist Information
+                    ধাপ ২: ছাদাবাজ তথ্য / Step 2: Extortionist Information
                 </h2>
 
                 <!-- Political Affiliation -->
                 <label class="block mt-4 text-sm font-semibold text-gray-700">
-                    Political Affiliation/Organization: <span class="text-red-600">*</span>
+                    রাজনৈতিক সংস্থার নাম / Political Affiliation/Organization: <span class="text-red-600">*</span>
                 </label>
                 <select name="political_affiliation" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400" required>
                     <option value="">Select political affiliation</option>
@@ -168,7 +168,7 @@
 
                 <!-- Extortionist Name (Optional) -->
                 <label class="block mt-4 text-sm font-semibold text-gray-700">
-                    Extortionist Name (if known):
+                    ব্যক্তির নাম (যদি জানা থাকে) / Extortionist Name (if known):
                 </label>
                 <input 
                     type="text" 
@@ -179,7 +179,7 @@
 
                 <!-- Position/Role -->
                 <label class="block mt-4 text-sm font-semibold text-gray-700">
-                    Position/Role (if known):
+                    পদবী/ভূমিকা (যদি জানা থাকে) / Position/Role (if known):
                 </label>
                 <input 
                     type="text" 
@@ -198,7 +198,9 @@
 
                 <!-- Individual Extorters (Optional) -->
                 <div class="mt-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Individual Extorters (Optional)</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                        ছাদাবাজার ব্যক্তি (ঐচ্ছিক) / Individual Extorters (Optional)
+                    </h3>
                     <div id="individuals-container">
                         <div class="individual-item mb-4 border p-4 rounded">
                             <label class="block text-sm font-semibold text-gray-700">Name:</label>
@@ -215,7 +217,9 @@
                             <input type="file" name="extorter_photos[0][]" multiple class="w-full p-2 border rounded">
                         </div>
                     </div>
-                    <button type="button" id="add-individual" class="mt-2 text-blue-600 hover:underline">+ Add another extorter</button>
+                    <button type="button" id="add-individual" class="mt-2 text-blue-600 hover:underline">
+                        আরও একজন ছাদাবাজ যুক্ত করুন / + Add another extorter
+                    </button>
                 </div>
                 <script>
                     document.addEventListener('DOMContentLoaded', function(){
@@ -243,14 +247,14 @@
                         onclick="prevStep(2)" 
                         class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
                     >
-                        Previous
+                        পূর্ববর্তী (PREVIOUS)
                     </button>
                     <button 
                         type="button" 
                         onclick="nextStep(2)" 
                         class="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-gray-800 transition"
                     >
-                        Next
+                        পরবর্তী (NEXT)
                     </button>
                 </div>
             </div>
@@ -258,12 +262,12 @@
             <!-- STEP 3: Business Details -->
             <div id="step3" class="bg-white p-6 rounded-lg shadow-inner hidden">
                 <h2 class="text-xl font-bold text-gray-900 mb-4">
-                    Step 3: Business/Organization Details
+                    ধাপ ৩: ব্যবসা/সংগঠন তথ্য / Step 3: Business/Organization Details
                 </h2>
 
                 <!-- Business Name -->
                 <label class="block mt-4 text-sm font-semibold text-gray-700">
-                    Business/Organization Name: <span class="text-red-600">*</span>
+                    ব্যবসা/সংগঠন নাম / Business/Organization Name: <span class="text-red-600">*</span>
                 </label>
                 <input 
                     type="text" 
@@ -275,7 +279,7 @@
 
                 <!-- Business Sector -->
                 <label class="block mt-4 text-sm font-semibold text-gray-700">
-                    Business Sector: <span class="text-red-600">*</span>
+                    ব্যবসা খাত / Business Sector: <span class="text-red-600">*</span>
                 </label>
                 <select name="business_sector" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400" required>
                     <option value="">Select business sector</option>
@@ -295,7 +299,7 @@
 
                 <!-- Business Location - District -->
                 <label class="block mt-4 text-sm font-semibold text-gray-700">
-                    District: <span class="text-red-600">*</span>
+                    জেলা / District: <span class="text-red-600">*</span>
                 </label>
                 <select name="business_address_district" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400" required>
                     <option value="">Select district</option>
@@ -312,7 +316,7 @@
 
                 <!-- Business Location - Upazila -->
                 <label class="block mt-4 text-sm font-semibold text-gray-700">
-                    Upazila/Area: <span class="text-red-600">*</span>
+                    উপজেলা/এলাকা / Upazila/Area: <span class="text-red-600">*</span>
                 </label>
                 <input 
                     type="text" 
@@ -340,14 +344,14 @@
                         onclick="prevStep(3)" 
                         class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
                     >
-                        Previous
+                        পূর্ববর্তী (PREVIOUS)
                     </button>
                     <button 
                         type="button" 
                         onclick="nextStep(3)" 
                         class="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-gray-800 transition"
                     >
-                        Next
+                        পরবর্তী (NEXT)
                     </button>
                 </div>
             </div>
@@ -355,14 +359,14 @@
             <!-- STEP 4: Incident Details & Submission -->
             <div id="step4" class="bg-white p-6 rounded-lg shadow-inner hidden">
                 <h2 class="text-xl font-bold text-gray-900 mb-4">
-                    Step 4: Incident Details & Submission
+                    ধাপ ৪: ঘটনা বিবরণ ও জমা / Step 4: Incident Details & Submission
                 </h2>
 
                 <!-- Date & Time -->
                 <div class="flex flex-wrap gap-4">
                     <div class="flex-1">
                         <label class="block text-sm font-semibold text-gray-700">
-                            Date of Incident:
+                            ঘটনাকার্য তারিখ / Date of Incident:
                         </label>
                         <input 
                             type="date" 
@@ -372,7 +376,7 @@
                     </div>
                     <div class="flex-1">
                         <label class="block text-sm font-semibold text-gray-700">
-                            Time of Incident:
+                            ঘটনাকার্য সময় / Time of Incident:
                         </label>
                         <input 
                             type="time" 
@@ -384,7 +388,7 @@
 
                 <!-- Demanded Amount -->
                 <label class="block mt-4 text-sm font-semibold text-gray-700">
-                    Demanded Amount (BDT):
+                    চাওয়া অর্থের পরিমাণ (BDT) / Demanded Amount (BDT):
                 </label>
                 <input 
                     type="number" 
@@ -395,7 +399,7 @@
 
                 <!-- Approach Method -->
                 <label class="block mt-4 text-sm font-semibold text-gray-700">
-                    Method of Approach: <span class="text-red-600">*</span>
+                    যোগাযোগের পদ্ধতি / Method of Approach: <span class="text-red-600">*</span>
                 </label>
                 <select name="approach_method" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400" required>
                     <option value="">How were you approached?</option>
@@ -418,14 +422,14 @@
                             class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
                         >
                         <label for="recurring_demand" class="ml-2 block text-sm text-gray-700">
-                            This is a recurring demand (happens repeatedly)
+                            এটি পুনরাবৃত্তি দাবি (ঘটনাটি পুনরায় ঘটে) / This is a recurring demand (happens repeatedly)
                         </label>
                     </div>
                 </div>
 
                 <!-- Description -->
                 <label class="block mt-4 text-sm font-semibold text-gray-700">
-                    Detailed Description of Incident: <span class="text-red-600">*</span>
+                    ঘটনা বিস্তারিত বিবরণ / Detailed Description of Incident: <span class="text-red-600">*</span>
                 </label>
                 <textarea 
                     name="threat_description" 
@@ -437,7 +441,7 @@
 
                 <!-- Evidence Files -->
                 <label class="block mt-4 text-sm font-semibold text-gray-700">
-                    Evidence Files (Optional):
+                    প্রমাণ ফাইল (ঐচ্ছিক) / Evidence Files (Optional):
                 </label>
                 <div class="mt-1 p-4 border border-dashed border-gray-300 rounded-lg bg-gray-50">
                     <input 
@@ -455,7 +459,7 @@
                 <!-- Police Report Status -->
                 <div class="mt-4">
                     <label class="block text-sm font-semibold text-gray-700">
-                        Have you reported this to the police?
+                        আপনি কি পুলিশে রিপোর্ট করেছেন? / Have you reported this to the police?
                     </label>
                     <select name="police_status" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400">
                         <option value="unreported">Not reported</option>
@@ -531,13 +535,13 @@
                         onclick="prevStep(4)" 
                         class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
                     >
-                        Previous
+                        পূর্ববর্তী (PREVIOUS)
                     </button>
                     <button 
                         type="submit" 
                         class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-red-400 transition"
                     >
-                        Submit Report
+                        জমা দিন (SUBMIT REPORT)
                     </button>
                 </div>
 
