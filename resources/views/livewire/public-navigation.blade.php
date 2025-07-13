@@ -65,6 +65,20 @@
                         </div>
                     @endauth
 
+                    <!-- Language Switcher -->
+                    <div class="relative" x-data="{ openLang: false }">
+                        <button @click="openLang = !openLang" class="flex items-center focus:outline-none text-gray-900 hover:text-gray-600">
+                            <span class="mr-1 uppercase">{{ app()->getLocale() }}</span>
+                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <div x-show="openLang" @click.away="openLang = false" class="absolute right-0 mt-2 w-24 bg-white border border-gray-200 rounded shadow-md py-2 z-50">
+                            <a href="{{ route('lang.switch', 'en') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">English</a>
+                            <a href="{{ route('lang.switch', 'bn') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">বাংলা</a>
+                        </div>
+                    </div>
+
                     @guest
                         <!-- Desktop: Login Link -->
                         <a href="{{ route('login') }}" class="text-gray-900 hover:text-gray-600">
@@ -107,6 +121,12 @@
         <!-- Mobile Menu -->
         <div class="sm:hidden" x-show="open" @click.away="open = false">
             <div class="pt-2 pb-3 space-y-1">
+                <!-- Mobile Language Switcher -->
+                <div class="px-4 py-2 flex justify-end space-x-2">
+                    <a href="{{ route('lang.switch', 'en') }}" class="px-3 py-1 text-sm rounded {{ app()->getLocale() == 'en' ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-700' }}">EN</a>
+                    <a href="{{ route('lang.switch', 'bn') }}" class="px-3 py-1 text-sm rounded {{ app()->getLocale() == 'bn' ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-700' }}">BN</a>
+                </div>
+
                 <a href="{{ route('home') }}" class="block pl-3 pr-4 py-2 text-base font-medium text-gray-700 hover:bg-gray-100">
                     Home
                 </a>

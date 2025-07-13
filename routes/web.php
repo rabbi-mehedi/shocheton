@@ -10,6 +10,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\ExtortionReportController;
 use App\Http\Controllers\PartyRepresentativeController;
+use App\Http\Controllers\LocalizationController;
 
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\EmergencyAlertController;
@@ -17,6 +18,8 @@ use App\Http\Controllers\EmergencyAlertController;
 use App\Http\Middleware\CheckAdmin;
 
 use Illuminate\Support\Facades\Route;
+
+Route::get('lang/{locale}', [LocalizationController::class, 'setLang'])->name('lang.switch');
 
 Route::get('/map', EmergencyAlertController::class)
     ->name('map');
