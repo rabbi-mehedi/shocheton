@@ -263,6 +263,59 @@
         </div>
     </div>
 
+    {{-- Representative Flagging Section --}}
+    @auth
+        @if(auth()->user()->role === 'representative')
+            <div class="mt-6 bg-white shadow rounded-lg">
+                <div class="bg-orange-500 text-white px-4 py-2 rounded-t-lg">
+                    <i class="fas fa-flag me-1"></i>
+                    Flag this Report
+                </div>
+                <div class="p-4">
+                    <form action="{{ route('representative.reports.flag', $report->id) }}" method="POST">
+                        @csrf
+                        <div class="mb-4">
+                            <label for="flag_type" class="block text-sm font-medium text-gray-700">Flag Type</label>
+                            <select name="flag_type" id="flag_type" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                <option>False Information</option>
+                                <option>Insufficient Evidence</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="comment" class="block text-sm font-medium text-gray-700">Comment (Optional)</label>
+                            <textarea name="comment" id="comment" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"></textarea>
+                        </div>
+                        <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
+                            Submit Flag
+                        </button>
+                    </form>
+                </div>
+            </div>
+        @endif
+    @endauth
+
+    {{-- Display Existing Flags --}}
+    @if($report->flags->count() > 0)
+        <div class="mt-6 bg-white shadow rounded-lg">
+            <div class="bg-gray-700 text-white px-4 py-2 rounded-t-lg">
+                <i class="fas fa-history me-1"></i>
+                Flagging History
+            </div>
+            <div class="p-4">
+                @foreach($report->flags as $flag)
+                    <div class="border-b border-gray-200 py-3">
+                        <p class="text-sm font-semibold text-gray-800">{{ $flag->user->name }} flagged as <span class="font-bold">{{ $flag->flag_type }}</span></p>
+                        <p class="text-xs text-gray-500">{{ $flag->created_at->diffForHumans() }}</p>
+                        @if($flag->comment)
+                            <p class="mt-2 text-sm text-gray-600 bg-gray-50 p-2 rounded">{{ $flag->comment }}</p>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
+
+
     <div class="mt-4 flex space-x-4">
         <a href="{{ route('admin.extortion.edit', $report->id) }}" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
             Edit Report

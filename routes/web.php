@@ -9,6 +9,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\ExtortionReportController;
+use App\Http\Controllers\PartyRepresentativeController;
 
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\EmergencyAlertController;
@@ -52,32 +53,34 @@ Route::post('/report-extortion', [ExtortionReportController::class, 'submitForm'
 
 Route::get('/search', [SearchController::class, 'results'])->name('search.results');
 
-Route::group([
-    'prefix' => 'admin',
-    'middleware' => CheckAdmin::class,
-], function () {
-    Route::get('/dashboard', AdminController::class)->name('admin.dashboard');
-    Route::get('/users', [AdminController::class, 'users'])->name('admin.users');
-    Route::get('/users/{user:id}/edit', [AdminController::class, 'edit'])->name('admin.user.edit');
-    Route::put('/users/{user:id}/update', [AdminController::class, 'update'])->name('admin.user.update');
-    Route::get('/offenders', [AdminController::class, 'offenders'])->name('admin.offenders'); 
-    Route::get('/offenders/{offender:id}/edit', [AdminController::class, 'offenderEdit'])->name('admin.offender.edit'); 
-    Route::put('/offenders/{offender:id}/update', [AdminController::class, 'offenderUpdate'])->name('admin.offender.update'); 
+Route::middleware(['auth', CheckAdmin::class])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    
+    Route::get('/users', [AdminController::class, 'users'])->name('users');
+    Route::get('/users/{user:id}/edit', [AdminController::class, 'edit'])->name('user.edit');
+    Route::put('/users/{user:id}/update', [AdminController::class, 'update'])->name('user.update');
+    
+    Route::get('/offenders', [AdminController::class, 'offenders'])->name('offenders'); 
+    Route::get('/offenders/{offender:id}/edit', [AdminController::class, 'offenderEdit'])->name('offender.edit'); 
+    Route::put('/offenders/{offender:id}/update', [AdminController::class, 'offenderUpdate'])->name('offender.update'); 
 
-    Route::get('/reports', ReportController::class)->name('admin.reports'); 
-    Route::get('/reports/{report:id}', [ReportController::class,'view'])->name('admin.report.view'); 
-    Route::get('/reports/{report:id}/edit', [ReportController::class, 'edit'])->name('admin.report.edit'); 
-    Route::put('/reports/{report:id}/update', [ReportController::class, 'update'])->name('admin.report.update'); 
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports'); 
+    Route::get('/reports/{report:id}', [ReportController::class,'view'])->name('report.view'); 
+    Route::get('/reports/{report:id}/edit', [ReportController::class, 'edit'])->name('report.edit'); 
+    Route::put('/reports/{report:id}/update', [ReportController::class, 'update'])->name('report.update'); 
     
     // Extortion report admin routes
-    Route::get('/extortion', [ExtortionReportController::class, 'index'])->name('admin.extortion');
-    // Admin view for all extortion reports (plural)
-    Route::get('/extorters', [ExtortionReportController::class, 'index'])->name('admin.extorters');
-    Route::get('/extortion/{report:id}', [ExtortionReportController::class, 'view'])->name('admin.extortion.view');
-    Route::get('/extortion/{report:id}/edit', [ExtortionReportController::class, 'edit'])->name('admin.extortion.edit');
-    Route::put('/extortion/{report:id}/update', [ExtortionReportController::class, 'update'])->name('admin.extortion.update');
-    // Add more admin routes here
+    Route::get('/extorters', [ExtortionReportController::class, 'adminIndex'])->name('extorters.index');
+    Route::get('/extorters/{extortionReport}', [ExtortionReportController::class, 'adminShow'])->name('extorters.show');
+
+    // Party Representative Management
+    Route::get('/representatives', [AdminController::class, 'listRepresentatives'])->name('representatives.index');
+    Route::put('/representatives/{representative}/approve', [AdminController::class, 'approveRepresentative'])->name('representatives.approve');
+    Route::put('/representatives/{representative}/reject', [AdminController::class, 'rejectRepresentative'])->name('representatives.reject');
+    Route::get('/representatives/{representative}/categories', [AdminController::class, 'assignCategories'])->name('representatives.categories');
+    Route::post('/representatives/{representative}/categories', [AdminController::class, 'syncCategories'])->name('representatives.categories.sync');
 });
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -133,6 +136,16 @@ Route::get('resources/psychological', function () {
 Route::get('resources/ngo', function () {
     return view('resources.ngo');
 })->name('ngo');
+
+// Party Representative Registration Routes
+Route::get('/representative/register', [PartyRepresentativeController::class, 'create'])->name('representative.register');
+Route::post('/representative/register', [PartyRepresentativeController::class, 'store']);
+
+Route::middleware(['auth', \App\Http\Middleware\CheckRepresentative::class])->prefix('representative')->name('representative.')->group(function () {
+    Route::get('/dashboard', [PartyRepresentativeController::class, 'dashboard'])->name('dashboard');
+    Route::get('/reports/{extortionReport}', [PartyRepresentativeController::class, 'showReport'])->name('reports.show');
+    Route::post('/reports/{report}/flag', [PartyRepresentativeController::class, 'flagReport'])->name('reports.flag');
+});
 
 require __DIR__.'/auth.php';
 

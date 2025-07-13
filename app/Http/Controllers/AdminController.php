@@ -6,17 +6,62 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Offender;
 use App\Models\Report;
+use App\Models\PartyRepresentative;
+use App\Models\Category;
 
 
 class AdminController extends Controller
 {
-    public function __invoke(User $user, Offender $offender, Report $report)
+    public function dashboard()
     {
-        $allUsers = $user::latest()->get();
-        $allOffenders = $offender::latest()->get();
-        $allReports = $report::latest()->get();
+        $allUsers = User::latest()->get();
+        $allOffenders = Offender::latest()->get();
+        $allReports = Report::latest()->get();
+        $pendingReps = PartyRepresentative::where('status', 'pending')->count();
 
-        return view('admin.dashboard',compact('allUsers','allOffenders','allReports'));
+        return view('admin.dashboard', compact('allUsers', 'allOffenders', 'allReports', 'pendingReps'));
+    }
+
+    public function listRepresentatives()
+    {
+        $representatives = PartyRepresentative::with(['user', 'party'])->latest()->get();
+        return view('admin.representatives.index', compact('representatives'));
+    }
+
+    public function approveRepresentative(PartyRepresentative $representative)
+    {
+        $representative->update(['status' => 'approved']);
+
+        // also update user role
+        $representative->user->update(['role' => 'representative']);
+
+        return redirect()->route('admin.representatives.index')->with('success', 'Representative approved.');
+    }
+
+    public function rejectRepresentative(PartyRepresentative $representative)
+    {
+        $representative->update(['status' => 'rejected']);
+        return redirect()->route('admin.representatives.index')->with('success', 'Representative rejected.');
+    }
+
+    public function assignCategories(PartyRepresentative $representative)
+    {
+        $categories = Category::all();
+        $assignedCategories = $representative->categories()->pluck('id')->toArray();
+
+        return view('admin.representatives.categories', compact('representative', 'categories', 'assignedCategories'));
+    }
+
+    public function syncCategories(Request $request, PartyRepresentative $representative)
+    {
+        $request->validate([
+            'categories' => 'nullable|array',
+            'categories.*' => 'exists:categories,id',
+        ]);
+
+        $representative->categories()->sync($request->categories);
+
+        return redirect()->route('admin.representatives.index')->with('success', 'Categories updated successfully.');
     }
 
     public function users(User $user)

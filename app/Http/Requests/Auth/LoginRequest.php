@@ -49,6 +49,14 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        $user = Auth::user();
+        if ($user->role === 'representative-pending') {
+            Auth::logout();
+            throw ValidationException::withMessages([
+                'email' => 'Your application is pending approval. You cannot login at this time.',
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 

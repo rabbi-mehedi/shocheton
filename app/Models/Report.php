@@ -8,6 +8,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Models\User;
 use App\Models\Offender;
 use App\Models\Extortionist;
+use App\Models\ReportFlag;
 
 
 class Report extends Model implements HasMedia
@@ -48,5 +49,10 @@ class Report extends Model implements HasMedia
     public function extortionist()
     {
         return $this->hasOne(Extortionist::class);
+    }
+
+    public function flags()
+    {
+        return $this->hasMany(ReportFlag::class);
     }
 }

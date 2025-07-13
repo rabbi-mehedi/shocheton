@@ -8,8 +8,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 use App\Models\EmergencyContact;
+use App\Models\PartyRepresentative;
 
 class User extends Authenticatable implements HasMedia
 {
@@ -27,6 +29,7 @@ class User extends Authenticatable implements HasMedia
         'phone',
         'password',
         'role',
+        'gender',
     ];
 
     /**
@@ -67,7 +70,12 @@ class User extends Authenticatable implements HasMedia
         return $this->hasMany(Report::class);
     }
 
-    public function emergencyContacts()
+    public function partyRepresentative()
+    {
+        return $this->hasOne(PartyRepresentative::class);
+    }
+
+    public function emergencyContacts(): HasMany
     {
         return $this->hasMany(EmergencyContact::class);
     }
