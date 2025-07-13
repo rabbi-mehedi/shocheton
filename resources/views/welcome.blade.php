@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>সচেতন | Bangladesh's First Sex Offender Registry</title>
+    <title>সচেতন | Empowering Citizens Against Abuse and Extortion</title>
     <link rel="icon" type="image/png" href="{{asset('iconmark.png')}}">
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -23,7 +23,7 @@
                     <img src="{{asset('wide_logo.png')}}" class="h-[8vh]" alt="Shocheton.org">
                 </a>
                 <h1 class="text-lg mt-3 md:text-xl font-bold uppercase tracking-wider text-gray-800">
-                    Bangladesh Sex Offenders<br>Public Registry
+                    Empowering Citizens Against Abuse<br>and Extortion
                 </h1>
             </div>
         </header>

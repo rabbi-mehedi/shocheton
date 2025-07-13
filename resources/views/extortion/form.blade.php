@@ -39,12 +39,24 @@
                 </div>
                 <p id="credibility-text" class="text-right text-xs text-gray-500 mt-1">0%</p>
             </div>
-            <!-- Progress Indicators -->
-            <div class="flex items-center justify-center space-x-4 mb-6">
-                <div id="step1-indicator" class="w-8 h-8 flex items-center justify-center rounded-full bg-red-600 text-white font-bold">1</div>
-                <div id="step2-indicator" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-300 text-gray-700 font-bold">2</div>
-                <div id="step3-indicator" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-300 text-gray-700 font-bold">3</div>
-                <div id="step4-indicator" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-300 text-gray-700 font-bold">4</div>
+            <!-- Progress Indicators with Labels -->
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex flex-col items-center flex-1">
+                    <div id="step1-indicator" class="w-8 h-8 flex items-center justify-center rounded-full bg-red-600 text-white font-bold">1</div>
+                    <span class="mt-2 text-xs text-gray-600">Step 1: Your Info</span>
+                </div>
+                <div class="flex flex-col items-center flex-1">
+                    <div id="step2-indicator" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-300 text-gray-700 font-bold">2</div>
+                    <span class="mt-2 text-xs text-gray-600">Step 2: Chadabaaj Info</span>
+                </div>
+                <div class="flex flex-col items-center flex-1">
+                    <div id="step3-indicator" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-300 text-gray-700 font-bold">3</div>
+                    <span class="mt-2 text-xs text-gray-600">Step 3: Business Info</span>
+                </div>
+                <div class="flex flex-col items-center flex-1">
+                    <div id="step4-indicator" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-300 text-gray-700 font-bold">4</div>
+                    <span class="mt-2 text-xs text-gray-600">Step 4: Incident Details</span>
+                </div>
             </div>
 
             <!-- STEP 1: User Info -->
@@ -147,7 +159,7 @@
             <!-- STEP 2: Extortionist Information -->
             <div id="step2" class="bg-white p-6 rounded-lg shadow-inner hidden">
                 <h2 class="text-xl font-bold text-gray-900 mb-4">
-                    ধাপ ২: ছাদাবাজ তথ্য / Step 2: Extortionist Information
+                    ধাপ ২: চাঁদাবাজ তথ্য / Step 2: Extortionist Information
                 </h2>
 
                 <!-- Political Affiliation -->
@@ -199,7 +211,7 @@
                 <!-- Individual Extorters (Optional) -->
                 <div class="mt-6">
                     <h3 class="text-lg font-semibold text-gray-900 mb-2">
-                        ছাদাবাজার ব্যক্তি (ঐচ্ছিক) / Individual Extorters (Optional)
+                        চাঁদাবাজ ব্যক্তি (ঐচ্ছিক) / Individual Extorters (Optional)
                     </h3>
                     <div id="individuals-container">
                         <div class="individual-item mb-4 border p-4 rounded">
@@ -218,7 +230,7 @@
                         </div>
                     </div>
                     <button type="button" id="add-individual" class="mt-2 text-blue-600 hover:underline">
-                        আরও একজন ছাদাবাজ যুক্ত করুন / + Add another extorter
+                        আরও একজন চাঁদাবাজ যুক্ত করুন / + Add another extorter
                     </button>
                 </div>
                 <script>
@@ -440,20 +452,19 @@
                 ></textarea>
 
                 <!-- Evidence Files -->
-                <label class="block mt-4 text-sm font-semibold text-gray-700">
-                    প্রমাণ ফাইল (ঐচ্ছিক) / Evidence Files (Optional):
-                </label>
-                <div class="mt-1 p-4 border border-dashed border-gray-300 rounded-lg bg-gray-50">
-                    <input 
-                        type="file" 
-                        name="evidence[]" 
-                        multiple 
-                        class="w-full"
-                    >
-                    <p class="text-xs text-gray-500 mt-2">
-                        You can upload photos, audio recordings, screenshots, or documents as evidence.
-                        Accepted formats: jpg, png, pdf, mp3, mp4, txt, doc (max 10MB each)
-                    </p>
+                <div class="mt-1">
+                    <div class="dropzone relative border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+                        </svg>
+                        <p class="text-gray-600">Drag & drop evidence files here or click to upload<br><span class="text-xs text-gray-500">jpg, png, pdf, mp3, mp4, txt, doc (max 10MB each)</span></p>
+                        <input 
+                            type="file" 
+                            name="evidence[]" 
+                            multiple 
+                            class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                        >
+                    </div>
                 </div>
 
                 <!-- Police Report Status -->
