@@ -14,6 +14,7 @@
 <body>
     <livewire:navigation-bar></livewire:navigation-bar>
     @yield('page_content')
+    @yield('scripts')
     @livewireScripts
 </body>
 </html>
