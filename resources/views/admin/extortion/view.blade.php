@@ -1,22 +1,22 @@
 @extends('layouts.admin')
 
-@section('content')
-<div class="container-fluid px-4">
+@section('page_content')
+<div class="container mx-auto px-4 py-6">
     <h1 class="mt-4">Extortion Report #{{ $report->id }}</h1>
-    <ol class="breadcrumb mb-4">
+    <nav class="text-sm text-gray-500 mb-4">
         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
         <li class="breadcrumb-item"><a href="{{ route('admin.extortion') }}">Extortion Reports</a></li>
         <li class="breadcrumb-item active">View Report #{{ $report->id }}</li>
-    </ol>
+    </nav>
     
-    <div class="row mb-4">
-        <div class="col-md-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div>
             <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
+                <div class="bg-blue-600 text-white px-4 py-2 rounded-t-lg">
                     <i class="fas fa-user-shield me-1"></i>
                     Extortionist Information
                 </div>
-                <div class="card-body">
+                <div class="p-4">
                     <table class="table table-striped">
                         <tr>
                             <th style="width: 35%">Name:</th>
