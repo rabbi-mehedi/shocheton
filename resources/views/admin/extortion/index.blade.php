@@ -35,7 +35,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($extortionReports as $report)
+                    @forelse($extortionReports as $report)
                         <tr>
                             <td>{{ $report->id }}</td>
                             <td>{{ $report->created_at->format('Y-m-d') }}</td>
@@ -72,7 +72,11 @@
                                 </div>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="9" class="text-center">No extortion reports found.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
