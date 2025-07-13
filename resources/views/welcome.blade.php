@@ -228,6 +228,7 @@
             </div>
 
             <!-- Extortionists Grid -->
+            @if($extortionists->isNotEmpty())
             <div class="max-w-6xl mx-auto">
                 <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b border-gray-200">Recent Extortionists</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -246,6 +247,7 @@
                     @endforeach
                 </div>
             </div>
+            @endif
         </main>
     </div>
 
