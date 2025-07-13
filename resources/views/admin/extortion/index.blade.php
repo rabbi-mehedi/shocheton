@@ -1,80 +1,76 @@
 @extends('layouts.admin')
 
+@section('page_title','Political Extortion Reports')
 @section('page_content')
-<div class="container-fluid px-4">
-    <h1 class="mt-4">Political Extortion Reports</h1>
-    <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-        <li class="breadcrumb-item active">Extortion Reports</li>
-    </ol>
-    
+<div class="container mx-auto px-4 py-6">
+    <h1 class="text-2xl font-bold text-gray-900 mb-4">Political Extortion Reports</h1>
+
+    <!-- Success Message -->
     @if(session('success'))
-        <div class="alert alert-success">
+        <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
             {{ session('success') }}
         </div>
     @endif
-    
-    <div class="card mb-4">
-        <div class="card-header">
-            <i class="fas fa-table me-1"></i>
-            Extortion Reports
+
+    <!-- Reports Table Card -->
+    <div class="bg-white shadow rounded-lg mb-6">
+        <div class="px-6 py-4 border-b border-gray-200 font-semibold text-gray-800">
+            <i class="fas fa-table me-1"></i> Extortion Reports
         </div>
-        <div class="card-body">
-            <table id="extortionReportsTable" class="table table-striped table-bordered">
-                <thead>
+        <div class="overflow-x-auto">
+            <table id="extortionReportsTable" class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
                     <tr>
-                        <th>ID</th>
-                        <th>Date Reported</th>
-                        <th>Political Affiliation</th>
-                        <th>Business Name</th>
-                        <th>Location</th>
-                        <th>Approach Method</th>
-                        <th>Status</th>
-                        <th>Verified</th>
-                        <th>Actions</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Reported</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Affiliation</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Business</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Approach</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Verified</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($extortionReports as $report)
                         <tr>
-                            <td>{{ $report->id }}</td>
-                            <td>{{ $report->created_at->format('Y-m-d') }}</td>
-                            <td>{{ $report->extortionist->political_affiliation ?? 'Unknown' }}</td>
-                            <td>{{ $report->extortionist->business_name ?? 'Unknown' }}</td>
-                            <td>
-                                {{ $report->extortionist->business_address_district ?? '' }}, 
-                                {{ $report->extortionist->business_address_upazila ?? '' }}
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $report->id }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $report->created_at->format('Y-m-d') }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $report->extortionist->political_affiliation ?? 'Unknown' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $report->extortionist->business_name ?? 'Unknown' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ $report->extortionist->business_address_district ?? '' }}, {{ $report->extortionist->business_address_upazila ?? '' }}
                             </td>
-                            <td>{{ $report->extortionist->approach_method ?? 'Unknown' }}</td>
-                            <td>
-                                <span class="badge @if($report->extortionist->status === 'allegedly') bg-warning
-                                      @elseif($report->extortionist->status === 'confirmed') bg-danger
-                                      @elseif($report->extortionist->status === 'disproven') bg-success
-                                      @endif">
-                                    {{ ucfirst($report->extortionist->status ?? 'Unknown') }}
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $report->extortionist->approach_method ?? 'Unknown' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @php
+                                    $status = $report->extortionist->status ?? 'Unknown';
+                                    $statusClasses = [
+                                        'allegedly' => 'bg-yellow-100 text-yellow-800',
+                                        'confirmed' => 'bg-green-100 text-green-800',
+                                        'disproven' => 'bg-red-100 text-red-800',
+                                    ];
+                                @endphp
+                                <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-semibold {{ $statusClasses[$status] ?? 'bg-gray-100 text-gray-800' }}">
+                                    {{ ucfirst($status) }}
                                 </span>
                             </td>
-                            <td>
+                            <td class="px-6 py-4 whitespace-nowrap">
                                 @if($report->verified)
-                                    <span class="badge bg-success">Verified</span>
+                                    <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800">Verified</span>
                                 @else
-                                    <span class="badge bg-secondary">Unverified</span>
+                                    <span class="inline-flex px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-800">Unverified</span>
                                 @endif
                             </td>
-                            <td>
-                                <div class="btn-group" role="group">
-                                    <a href="{{ route('admin.extortion.view', $report->id) }}" class="btn btn-sm btn-primary">
-                                        <i class="fas fa-eye"></i> View
-                                    </a>
-                                    <a href="{{ route('admin.extortion.edit', $report->id) }}" class="btn btn-sm btn-warning">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </a>
-                                </div>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <a href="{{ route('admin.extortion.view', $report->id) }}" class="text-blue-600 hover:text-blue-900 mr-2">View</a>
+                                <a href="{{ route('admin.extortion.edit', $report->id) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="text-center">No extortion reports found.</td>
+                            <td colspan="9" class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-500">No extortion reports found.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -88,7 +84,10 @@
 <script>
     $(document).ready(function() {
         $('#extortionReportsTable').DataTable({
-            order: [[1, 'desc']]
+            order: [[1, 'desc']],
+            responsive: true,
+            paging: true,
+            searching: true,
         });
     });
 </script>
