@@ -71,6 +71,8 @@ Route::group([
     
     // Extortion report admin routes
     Route::get('/extortion', [ExtortionReportController::class, 'index'])->name('admin.extortion');
+    // Admin view for all extortion reports (plural)
+    Route::get('/extorters', [ExtortionReportController::class, 'index'])->name('admin.extorters');
     Route::get('/extortion/{report:id}', [ExtortionReportController::class, 'view'])->name('admin.extortion.view');
     Route::get('/extortion/{report:id}/edit', [ExtortionReportController::class, 'edit'])->name('admin.extortion.edit');
     Route::put('/extortion/{report:id}/update', [ExtortionReportController::class, 'update'])->name('admin.extortion.update');

@@ -51,7 +51,7 @@
     </div>
 
     <!-- Links to Index Pages -->
-    <div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div class="mt-8 grid grid-cols-1 sm:grid-cols-4 gap-4">
         <a href="{{ route('admin.users') }}"
            class="bg-red-600 text-white text-center py-3 rounded shadow hover:bg-red-700 transition">
            Manage Users
@@ -60,9 +60,13 @@
            class="bg-blue-600 text-white text-center py-3 rounded shadow hover:bg-blue-700 transition">
            Manage Offenders
         </a>
-        <a href="{{route('admin.reports')}}"
+        <a href="{{ route('admin.reports') }}"
            class="bg-green-600 text-white text-center py-3 rounded shadow hover:bg-green-700 transition">
            View Reports
+        </a>
+        <a href="{{ route('admin.extorters') }}"
+           class="bg-purple-600 text-white text-center py-3 rounded shadow hover:bg-purple-700 transition">
+           Manage Extortion Reports
         </a>
     </div>
 
