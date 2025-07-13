@@ -149,11 +149,11 @@
                         <div class="mb-3">
                             <label class="form-label">Support Needs</label>
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" id="needs_legal_support" name="needs_legal_support" {{ $report->needs_legal_support ? 'checked' : '' }}>
+                                <input class="form-check-input" type="checkbox" id="needs_legal_support" name="needs_legal_support" value="1" {{ $report->needs_legal_support ? 'checked' : '' }}>
                                 <label class="form-check-label" for="needs_legal_support">Needs Legal Support</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="needs_ngo_support" name="needs_ngo_support" {{ $report->needs_ngo_support ? 'checked' : '' }}>
+                                <input class="form-check-input" type="checkbox" id="needs_ngo_support" name="needs_ngo_support" value="1" {{ $report->needs_ngo_support ? 'checked' : '' }}>
                                 <label class="form-check-label" for="needs_ngo_support">Needs NGO Support</label>
                             </div>
                         </div>
@@ -161,7 +161,7 @@
                         <!-- Contact Permission -->
                         <div class="mb-3">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="contact_permission" name="contact_permission" {{ $report->contact_permission ? 'checked' : '' }}>
+                                <input class="form-check-input" type="checkbox" id="contact_permission" name="contact_permission" value="1" {{ $report->contact_permission ? 'checked' : '' }}>
                                 <label class="form-check-label" for="contact_permission">Contact Permission</label>
                             </div>
                         </div>
@@ -169,7 +169,7 @@
                         <!-- Report Verification -->
                         <div class="mb-3">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="verified" name="verified" {{ $report->verified ? 'checked' : '' }}>
+                                <input class="form-check-input" type="checkbox" id="verified" name="verified" value="1" {{ $report->verified ? 'checked' : '' }}>
                                 <label class="form-check-label" for="verified">Mark Report as Verified</label>
                             </div>
                         </div>

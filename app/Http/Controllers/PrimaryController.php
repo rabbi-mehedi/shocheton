@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Offender;
+use App\Models\Extortionist;
 use App\Models\Report;
 use App\Models\Witness;
 use Carbon\Carbon;
@@ -15,15 +16,15 @@ class PrimaryController extends Controller
 {
     public function __invoke()
     {
-        // Fetch offenders from the database.
-        $offenders = Offender::with('report')
-        ->whereHas('report', function ($query) {
-            $query->where('verified', true);
-        })
-        ->latest()
-        ->get();
+        // Fetch extortionists from the database (public verified)
+        $extortionists = Extortionist::with('report')
+            ->whereHas('report', function ($query) {
+                $query->where('verified', true);
+            })
+            ->latest()
+            ->get();
 
-        return view('welcome',compact('offenders'));
+        return view('welcome', compact('extortionists'));
     }
 
     public function showForm()

@@ -33,4 +33,9 @@ class Extortionist extends Model implements HasMedia
     {
         return $this->belongsTo(Report::class);
     }
+    
+    public function individuals()
+    {
+        return $this->hasMany(ExtorterIndividual::class);
+    }
 }

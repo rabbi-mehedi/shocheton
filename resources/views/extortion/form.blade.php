@@ -32,7 +32,13 @@
         <!-- Form Start -->
         <form id="extortionForm" action="{{ route('extortion.report.submit') }}" method="POST" enctype="multipart/form-data">
             @csrf
-
+            <div class="mb-4">
+                <label class="text-sm font-medium text-gray-700 mb-1">Report Credibility</label>
+                <div class="w-full bg-gray-200 h-4 rounded">
+                    <div id="credibility-bar" class="h-4 bg-red-500 rounded" style="width: 0%"></div>
+                </div>
+                <p id="credibility-text" class="text-right text-xs text-gray-500 mt-1">0%</p>
+            </div>
             <!-- Progress Indicators -->
             <div class="flex items-center justify-center space-x-4 mb-6">
                 <div id="step1-indicator" class="w-8 h-8 flex items-center justify-center rounded-full bg-red-600 text-white font-bold">1</div>
@@ -91,6 +97,7 @@
                             type="checkbox" 
                             id="is_anonymous" 
                             name="is_anonymous" 
+                            value="1"
                             class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
                         >
                         <label for="is_anonymous" class="ml-2 block text-sm text-gray-700">
@@ -189,6 +196,46 @@
                     </p>
                 </div>
 
+                <!-- Individual Extorters (Optional) -->
+                <div class="mt-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Individual Extorters (Optional)</h3>
+                    <div id="individuals-container">
+                        <div class="individual-item mb-4 border p-4 rounded">
+                            <label class="block text-sm font-semibold text-gray-700">Name:</label>
+                            <input type="text" name="extorter_names[]" class="w-full p-2 border rounded" placeholder="Name">
+                            <label class="block text-sm font-semibold text-gray-700 mt-2">Nickname:</label>
+                            <input type="text" name="extorter_nicknames[]" class="w-full p-2 border rounded" placeholder="Nickname (optional)">
+                            <label class="block text-sm font-semibold text-gray-700 mt-2">Position:</label>
+                            <input type="text" name="extorter_positions[]" class="w-full p-2 border rounded" placeholder="Position (optional)">
+                            <label class="block text-sm font-semibold text-gray-700 mt-2">Phone:</label>
+                            <input type="text" name="extorter_phones[]" class="w-full p-2 border rounded" placeholder="Phone (optional)">
+                            <label class="block text-sm font-semibold text-gray-700 mt-2">Description:</label>
+                            <textarea name="extorter_descriptions[]" class="w-full p-2 border rounded" rows="2" placeholder="Description (optional)"></textarea>
+                            <label class="block text-sm font-semibold text-gray-700 mt-2">Photos (Optional):</label>
+                            <input type="file" name="extorter_photos[0][]" multiple class="w-full p-2 border rounded">
+                        </div>
+                    </div>
+                    <button type="button" id="add-individual" class="mt-2 text-blue-600 hover:underline">+ Add another extorter</button>
+                </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function(){
+                        const container = document.getElementById('individuals-container');
+                        document.getElementById('add-individual').addEventListener('click', function(){
+                            const items = container.querySelectorAll('.individual-item');
+                            const index = items.length;
+                            const newItem = items[0].cloneNode(true);
+                            newItem.querySelectorAll('input, textarea').forEach(function(input){
+                                if (input.name.startsWith('extorter_photos')) {
+                                    input.name = 'extorter_photos['+index+'][]';
+                                } else {
+                                    input.value = '';
+                                }
+                            });
+                            container.appendChild(newItem);
+                        });
+                    });
+                </script>
+                
                 <!-- Navigation Buttons -->
                 <div class="flex justify-between mt-6">
                     <button 
@@ -367,6 +414,7 @@
                             type="checkbox" 
                             id="recurring_demand" 
                             name="recurring_demand" 
+                            value="1"
                             class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
                         >
                         <label for="recurring_demand" class="ml-2 block text-sm text-gray-700">
@@ -436,6 +484,7 @@
                             type="checkbox" 
                             id="needs_legal_support" 
                             name="needs_legal_support" 
+                            value="1"
                             class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
                         >
                         <label for="needs_legal_support" class="ml-2 block text-sm text-gray-700">
@@ -447,6 +496,7 @@
                             type="checkbox" 
                             id="needs_ngo_support" 
                             name="needs_ngo_support" 
+                            value="1"
                             class="h-4 w-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
                         >
                         <label for="needs_ngo_support" class="ml-2 block text-sm text-gray-700">
@@ -546,6 +596,45 @@ document.addEventListener('DOMContentLoaded', function() {
         activeIndicator.classList.remove("bg-gray-300", "text-gray-700");
         activeIndicator.classList.add("bg-red-600", "text-white");
     }
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('extortionForm');
+    const fields = Array.from(form.querySelectorAll('input:not([type=button]):not([type=hidden]):not([type=radio]):not([name="g-recaptcha-response"]), select, textarea'));
+    const barEl = document.getElementById('credibility-bar');
+    const textEl = document.getElementById('credibility-text');
+    const total = fields.length;
+
+    function updateCredibility() {
+        let count = 0;
+        fields.forEach(f => {
+            if ((f.type === 'checkbox' || f.type === 'radio') && f.checked) {
+                count++;
+            } else if (f.type === 'file' && f.files.length > 0) {
+                count++;
+            } else if (!['checkbox','radio','file'].includes(f.type) && f.value.trim() !== '') {
+                count++;
+            }
+        });
+        const pct = Math.round((count / total) * 100);
+        barEl.style.width = `${pct}%`;
+        barEl.classList.remove('bg-red-500','bg-yellow-500','bg-green-500');
+        if (pct < 50) {
+            barEl.classList.add('bg-red-500');
+        } else if (pct < 80) {
+            barEl.classList.add('bg-yellow-500');
+        } else {
+            barEl.classList.add('bg-green-500');
+        }
+        textEl.textContent = `${pct}%`;
+    }
+
+    fields.forEach(f => {
+        const event = ['checkbox','radio','file'].includes(f.type) || f.tagName.toLowerCase() === 'select' ? 'change' : 'input';
+        f.addEventListener(event, updateCredibility);
+    });
+    updateCredibility();
 });
 </script>
 @endsection 

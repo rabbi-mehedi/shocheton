@@ -30,6 +30,44 @@
     
         <!-- Main Container -->
         <main class="container mx-auto px-4 py-6">
+            <!-- Flash Messages -->
+            @if(session('success'))
+            <div class="max-w-4xl mx-auto mb-4">
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                    <strong class="font-bold">Success! </strong>
+                    <span class="block sm:inline">{{ session('success') }}</span>
+                    <button onclick="this.parentElement.style.display='none'" class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                        <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+                    </button>
+                </div>
+            </div>
+            @endif
+
+            @if(session('error'))
+            <div class="max-w-4xl mx-auto mb-4">
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <strong class="font-bold">Error! </strong>
+                    <span class="block sm:inline">{{ session('error') }}</span>
+                    <button onclick="this.parentElement.style.display='none'" class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                        <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+                    </button>
+                </div>
+            </div>
+            @endif
+
+            @if(session('type') == 'extortion' && session('report_id'))
+            <div class="max-w-4xl mx-auto mb-4">
+                <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+                    <strong class="font-bold">Extortion Report Submitted! </strong>
+                    <span class="block sm:inline">Your report has been submitted successfully. We will review it shortly.</span>
+                    <p class="mt-2">Report ID: #{{ session('report_id') }}</p>
+                    <button onclick="this.parentElement.style.display='none'" class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                        <svg class="fill-current h-6 w-6 text-blue-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><title>Close</title><path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/></svg>
+                    </button>
+                </div>
+            </div>
+            @endif
+
             <!-- Priority Section: Search & Report -->
             <div class="max-w-4xl mx-auto mb-8">
                 <!-- Report Button - Prominent -->
@@ -41,6 +79,19 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                             </svg>
                             I WANT TO REPORT AN INCIDENT
+                        </span>
+                    </a>
+                </div>
+
+                <!-- Report Extortion Button -->
+                <div class="text-center mb-6">
+                    <a href="{{ route('extortion.report.form') }}"
+                       class="inline-block bg-blue-600 hover:bg-blue-700 text-center text-white font-semibold uppercase px-6 py-4 rounded-lg shadow-md w-full sm:w-auto transition duration-200">
+                        <span class="flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            REPORT CHADABAAJ (POLITICAL EXTORTION)
                         </span>
                     </a>
                 </div>
@@ -176,12 +227,22 @@
                 </div>
             </div>
 
-            <!-- Offenders Grid -->
+            <!-- Extortionists Grid -->
             <div class="max-w-6xl mx-auto">
-                <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b border-gray-200">Recent Offenders</h2>
+                <h2 class="text-xl font-bold text-gray-800 mb-4 pb-2 border-b border-gray-200">Recent Extortionists</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    @foreach ($offenders as $offender)
-                        <livewire:offender :offender="$offender"></livewire:offender>
+                    @foreach ($extortionists as $extortionist)
+                        <div class="bg-white shadow-sm p-4 rounded-lg">
+                            <h3 class="text-lg font-bold text-gray-800">
+                                {{ $extortionist->name ?: $extortionist->political_affiliation }}
+                            </h3>
+                            <p class="text-sm text-gray-600">
+                                {{ $extortionist->business_name }}
+                            </p>
+                            <p class="mt-2 text-xs text-gray-500">
+                                Reported on {{ $extortionist->created_at->format('M d, Y') }}
+                            </p>
+                        </div>
                     @endforeach
                 </div>
             </div>
